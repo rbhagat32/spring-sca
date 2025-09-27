@@ -18,11 +18,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
+        // Client sends events with destination starting with /emit
+        config.setApplicationDestinationPrefixes("/emit");
+
         // Client subscribes here to receive messages
         config.enableSimpleBroker("/topic");
-
-        // Client sends messages with destination starting with /app
-        config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override

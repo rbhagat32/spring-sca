@@ -40,7 +40,7 @@ public class WebSocketEventListener {
 
         onlineUsersMap.disconnect(sessionId);
         simpMessagingTemplate.convertAndSend("/topic/online-users", onlineUsersMap.getOnlineUsers());
-        
+
         System.out.println("❌ User disconnected: " + sessionId);
     }
 }

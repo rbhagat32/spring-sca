@@ -53,7 +53,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setIsConnected(true);
         setLoading(false);
 
-        stompClient.subscribe("/topic/notifications", (message: IMessage) => {
+        stompClient.subscribe("/topic/message", (message: IMessage) => {
           const receivedMessage: string = JSON.parse(message.body).message;
           console.log("Message Received from Server:", receivedMessage);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -99,7 +99,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     if (stompClientRef.current && stompClientRef.current.connected) {
       stompClientRef.current.publish({
-        destination: "/app/send-message",
+        destination: "/emit/message",
         body: JSON.stringify({ message: msg }),
       });
     } else {

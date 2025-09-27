@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MessageController {
 
-    @MessageMapping("/send-message") // Client sends to: /app/sendMessage
-    @SendTo("/topic/notifications") // Broadcasts to:   /topic/notifications
+    @MessageMapping("/message")       // Client emits to:        /emit/message
+    @SendTo("/topic/message")         // Server broadcasts to:   /topic/message
     public String sendMessage(String message) {
         System.out.println("📨 Incoming message: " + message);
         return message;
