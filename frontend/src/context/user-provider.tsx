@@ -7,7 +7,6 @@ type UserContextType = {
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string, avatar?: File) => Promise<void>;
   logout: () => void;
-  getUserById: (id: string) => Promise<IUser>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -81,18 +80,8 @@ function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const getUserById = async (id: string): Promise<IUser> => {
-    try {
-      const res = await api.get<IUser>(`/api/user/${id}`);
-      return res.data;
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  };
-
   return (
-    <UserContext.Provider value={{ user, loading, login, signup, logout, getUserById }}>
+    <UserContext.Provider value={{ user, loading, login, signup, logout }}>
       {children}
     </UserContext.Provider>
   );

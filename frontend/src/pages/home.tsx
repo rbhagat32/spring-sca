@@ -1,14 +1,16 @@
+import { useSocket } from "@/context/socket-provider";
+import { OnlineUsers } from "@/components/core/online-users";
 import { MessageContainer } from "@/components/core/message-container";
 import { MessageInput } from "@/components/core/message-input";
-import { useSocket } from "@/context/socket-provider";
 
 export function HomePage() {
-  const { sendMessage, messages, loading } = useSocket();
+  const { sendMessage, messages, onlineUsers, loading } = useSocket();
 
   return (
-    <>
+    <section className="relative">
+      <OnlineUsers onlineUsers={onlineUsers} />
       <MessageContainer messages={messages} loading={loading} />
       <MessageInput sendMessage={sendMessage} />
-    </>
+    </section>
   );
 }

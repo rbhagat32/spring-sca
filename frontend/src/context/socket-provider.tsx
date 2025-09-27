@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { api } from "@/utils/axios";
 import { Client, type IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
@@ -19,6 +20,7 @@ interface SocketProviderProps {
 interface ISocketContext {
   sendMessage: (msg: string) => void;
   messages: string[];
+  onlineUsers: IUser[];
   loading: boolean;
   isConnected: boolean;
 }
@@ -31,14 +33,9 @@ interface StompMessage {
 
 const SocketContext = createContext<ISocketContext | null>(null);
 
-const useSocket = () => {
-  const state = useContext(SocketContext);
-  if (!state) throw new Error("useSocket must be used within a SocketProvider");
-  return state;
-};
-
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [messages, setMessages] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const stompClientRef = useRef<Client | null>(null);
@@ -57,17 +54,19 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setLoading(false);
 
         stompClient.subscribe("/topic/notifications", (message: IMessage) => {
-          try {
-            const receivedMessage: string = JSON.parse(message.body).message;
-            console.log("Message Received from Server:", receivedMessage);
+          const receivedMessage: string = JSON.parse(message.body).message;
+          console.log("Message Received from Server:", receivedMessage);
+          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        });
 
-            setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-          } catch (error) {
-            console.error("Error parsing message:", error);
-          }
+        stompClient.subscribe("/topic/online-users", (message: IMessage) => {
+          const users: IUser[] = JSON.parse(message.body);
+          console.log("Online Users Received from Server:", users);
+          setOnlineUsers(users);
         });
 
         fetchMessages();
+        getOnlineUsers();
       },
       onDisconnect: () => {
         console.log("Disconnected from STOMP broker");
@@ -100,7 +99,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     if (stompClientRef.current && stompClientRef.current.connected) {
       stompClientRef.current.publish({
-        destination: "/app/sendMessage",
+        destination: "/app/send-message",
         body: JSON.stringify({ message: msg }),
       });
     } else {
@@ -111,17 +110,26 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const fetchMessages = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${SERVER_URL}/api/messages`);
-      if (!res.ok) throw new Error("Failed to Fetch Messages!");
-
-      const data: StompMessage[] = await res.json();
-      setMessages(data.map((msg) => msg.content));
+      const response = await api.get<StompMessage[]>(`/api/message/get-all-messages`);
+      setMessages(response.data.map((msg) => msg.content));
     } catch (err) {
       console.error("Error fetching messages:", err);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const getOnlineUsers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await api.get<IUser[]>(`/api/user/get-online-users`);
+      setOnlineUsers(response.data);
+    } catch (err) {
+      console.error("Error fetching online users:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [onlineUsers]);
 
   useEffect(() => {
     connect();
@@ -144,10 +152,16 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [isConnected, loading, connect]);
 
   return (
-    <SocketContext.Provider value={{ sendMessage, messages, loading, isConnected }}>
+    <SocketContext.Provider value={{ sendMessage, messages, onlineUsers, loading, isConnected }}>
       {children}
     </SocketContext.Provider>
   );
+};
+
+const useSocket = () => {
+  const state = useContext(SocketContext);
+  if (!state) throw new Error("useSocket must be used within a SocketProvider");
+  return state;
 };
 
 export { SocketProvider, useSocket };
