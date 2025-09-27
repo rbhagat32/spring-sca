@@ -5,8 +5,8 @@ import com.rbhagat32.auth.backend.entity.UserEntity;
 import com.rbhagat32.auth.backend.repository.UserRepository;
 import com.rbhagat32.auth.backend.security.JwtUtil;
 import com.rbhagat32.auth.backend.util.CloudinaryUtil;
-import com.rbhagat32.auth.backend.util.ConversionUtil;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +20,12 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final ConversionUtil conversionUtil;
     private final CloudinaryUtil cloudinaryUtil;
+    private final ModelMapper modelMapper;
 
     public AuthResponseDTO register(RegisterRequestDTO body, MultipartFile avatar) {
         if (userRepository.findByEmail(body.getEmail()).isPresent()) {
@@ -52,7 +53,7 @@ public class AuthService {
 
         UserEntity savedUser = userRepository.save(user);
         String token = jwtUtil.generateToken(savedUser);
-        return conversionUtil.convertToAuthResponseDTO(token, savedUser);
+        return new AuthResponseDTO(token, modelMapper.map(user, UserDTO.class));
     }
 
     public AuthResponseDTO login(LoginRequestDTO body) {
@@ -64,7 +65,7 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(user);
-        return conversionUtil.convertToAuthResponseDTO(token, user);
+        return new AuthResponseDTO(token, modelMapper.map(user, UserDTO.class));
     }
 
     public UserDTO getLoggedInUser1(Authentication authentication) {
@@ -73,11 +74,11 @@ public class AuthService {
         }
 
         UserEntity loggedInUser = (UserEntity) authentication.getPrincipal();
-        return conversionUtil.convertToUserDTO(loggedInUser);
+        return modelMapper.map(loggedInUser, UserDTO.class);
     }
 
     public UserDTO getLoggedInUser2(UserEntity user) {
-        return conversionUtil.convertToUserDTO(user);
+        return modelMapper.map(user, UserDTO.class);
     }
 
     public UserDTO getLoggedInUser3() {
@@ -86,6 +87,6 @@ public class AuthService {
                 .getAuthentication()
                 .getPrincipal());
 
-        return conversionUtil.convertToUserDTO(loggedInUser);
+        return modelMapper.map(loggedInUser, UserDTO.class);
     }
 }

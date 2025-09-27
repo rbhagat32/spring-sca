@@ -6,7 +6,6 @@ import com.rbhagat32.auth.backend.dto.RegisterRequestDTO;
 import com.rbhagat32.auth.backend.dto.UserDTO;
 import com.rbhagat32.auth.backend.entity.UserEntity;
 import com.rbhagat32.auth.backend.service.AuthService;
-import com.rbhagat32.auth.backend.util.ConversionUtil;
 import com.rbhagat32.auth.backend.util.CookieUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final CookieUtil cookieUtil;
-    private final ConversionUtil conversionUtil;
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AuthResponseDTO> register(
