@@ -15,13 +15,13 @@ import java.time.Instant;
 public class MessageEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    // @GeneratedValue(strategy = GenerationType.UUID) // this has to be disabled to set UUID manually inside controller
     private String id;
 
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "sender_id", nullable = false)
     private UserEntity sender;
 
     @CreationTimestamp

@@ -4,6 +4,7 @@ import com.rbhagat32.auth.backend.util.CookieUtil;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -21,12 +22,15 @@ import java.time.Instant;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
+@Slf4j
 public class GlobalExceptionHandler {
 
     private final CookieUtil cookieUtil;
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGenericException(Exception ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -39,6 +43,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntimeException(Exception ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -51,6 +57,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.UNAUTHORIZED,
@@ -63,6 +71,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ApiError> handleJwtException(JwtException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.UNAUTHORIZED,
@@ -78,6 +88,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.FORBIDDEN,
@@ -90,6 +102,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiError> handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.NOT_FOUND,
@@ -102,6 +116,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST,
@@ -112,11 +128,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 
-    // === WebSocket Exception Handlers ===
-
+    // WebSocket Exception Handler
     @MessageExceptionHandler(Exception.class)
     @SendTo("/topic/errors")
     public ApiError handleWebSocketGenericException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+
         return new ApiError(
                 Instant.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR,

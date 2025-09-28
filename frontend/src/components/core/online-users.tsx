@@ -33,7 +33,7 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
       {!isOpen && (
         <Button size="icon" variant="secondary" onClick={() => setIsOpen(true)} className="size-8">
           <Info className="size-4" />
-        </Button> 
+        </Button>
       )}
 
       {isOpen && (
@@ -48,17 +48,13 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
             </Button>
           </div>
 
-          {onlineUsers.length > 0 ? (
-            <ul className="max-h-60 overflow-y-auto text-sm">
-              {onlineUsers.map((user) => (
-                <li key={user?.id} className="mb-2 rounded-md bg-zinc-800 p-2">
-                  {user?.name}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-neutral-500">No users online</p>
-          )}
+          <ul className="max-h-60 overflow-y-auto text-sm">
+            {onlineUsers.map((user) => (
+              <li key={user?.id} className="mb-2 rounded-md bg-zinc-800 p-2">
+                {user?.name}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

@@ -47,13 +47,11 @@ const SocketProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
         // socket listeners
         stompClient.subscribe("/topic/message", (message: StompMessageType) => {
           const receivedMessage: IMessage = JSON.parse(message.body);
-          console.log("Message Received from Server:", receivedMessage);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
 
         stompClient.subscribe("/topic/online-users", (message: StompMessageType) => {
           const users: IUser[] = JSON.parse(message.body);
-          console.log("Online Users Received from Server:", users);
           setOnlineUsers(users);
         });
 
@@ -66,18 +64,7 @@ const SocketProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
         getAllMessages();
         getOnlineUsers();
       },
-      onDisconnect: () => {
-        console.log("Disconnected from STOMP broker");
-        setIsConnected(false);
-      },
-      onStompError: (frame) => {
-        console.error("STOMP error:", frame);
-        setIsConnected(false);
-      },
-      onWebSocketError: (event) => {
-        console.error("WebSocket error:", event);
-        setIsConnected(false);
-      },
+      onDisconnect: () => setIsConnected(false),
     });
 
     stompClient.activate();
@@ -113,8 +100,6 @@ const SocketProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   }, [isConnected, loading, connect]);
 
   const sendMessage: ISocketContext["sendMessage"] = useCallback((msg: string) => {
-    console.log(`Sending Message to Server: ${msg}`);
-
     if (stompClientRef.current && stompClientRef.current.connected) {
       stompClientRef.current.publish({
         destination: "/emit/message",
