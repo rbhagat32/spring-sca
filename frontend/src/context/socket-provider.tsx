@@ -1,3 +1,5 @@
+import { api } from "@/utils/axios";
+import { Client, type IMessage as StompMessageType } from "@stomp/stompjs";
 import {
   createContext,
   useCallback,
@@ -7,9 +9,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { api } from "@/utils/axios";
-import { Client, type IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { useUser } from "./user-provider";
+import { toast } from "sonner";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -19,26 +21,22 @@ interface SocketProviderProps {
 
 interface ISocketContext {
   sendMessage: (msg: string) => void;
-  messages: string[];
+  messages: IMessage[];
   onlineUsers: IUser[];
   loading: boolean;
   isConnected: boolean;
 }
 
-interface StompMessage {
-  id: string;
-  content: string;
-  createdAt: string;
-}
-
 const SocketContext = createContext<ISocketContext | null>(null);
 
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const stompClientRef = useRef<Client | null>(null);
+
+  const { user } = useUser();
 
   const connect = useCallback(() => {
     const socket = new SockJS(`${SERVER_URL}/api/ws`);
@@ -53,16 +51,22 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setIsConnected(true);
         setLoading(false);
 
-        stompClient.subscribe("/topic/message", (message: IMessage) => {
-          const receivedMessage: string = JSON.parse(message.body).message;
+        stompClient.subscribe("/topic/message", (message: StompMessageType) => {
+          const receivedMessage: IMessage = JSON.parse(message.body);
           console.log("Message Received from Server:", receivedMessage);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
 
-        stompClient.subscribe("/topic/online-users", (message: IMessage) => {
+        stompClient.subscribe("/topic/online-users", (message: StompMessageType) => {
           const users: IUser[] = JSON.parse(message.body);
           console.log("Online Users Received from Server:", users);
           setOnlineUsers(users);
+        });
+
+        stompClient.subscribe("/topic/errors", (message: StompMessageType) => {
+          const error: string = JSON.parse(message.body);
+          console.error("Error Received from Server:", error);
+          toast.error(`Message must be less than 100 characters !`);
         });
 
         fetchMessages();
@@ -100,7 +104,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     if (stompClientRef.current && stompClientRef.current.connected) {
       stompClientRef.current.publish({
         destination: "/emit/message",
-        body: JSON.stringify({ message: msg }),
+        body: JSON.stringify({ content: msg, senderId: user?.id }),
       });
     } else {
       console.error("STOMP client not connected");
@@ -110,8 +114,8 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const fetchMessages = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get<StompMessage[]>(`/api/message/get-all-messages`);
-      setMessages(response.data.map((msg) => msg.content));
+      const response = await api.get<IMessage[]>(`/api/message/get-all-messages`);
+      setMessages(response.data);
     } catch (err) {
       console.error("Error fetching messages:", err);
     } finally {

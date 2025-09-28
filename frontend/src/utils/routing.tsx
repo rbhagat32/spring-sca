@@ -6,11 +6,18 @@ import { AuthLayout } from "@/layouts/auth";
 import { LoginPage } from "@/pages/login";
 import { SignUpPage } from "@/pages/signup";
 import { RootLayout } from "@/layouts/root";
+import { SocketProvider } from "@/context/socket-provider";
 
 const Routing = ({ isLoggedIn = false }: { isLoggedIn: boolean }) => {
   return (
     <Routes>
-      <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} redirect="/login" />}>
+      <Route
+        element={
+          <SocketProvider>
+            <ProtectedRoute isLoggedIn={isLoggedIn} redirect="/login" />
+          </SocketProvider>
+        }
+      >
         <Route
           path="/"
           element={

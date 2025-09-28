@@ -2,6 +2,7 @@ package com.rbhagat32.auth.backend.service;
 
 import com.rbhagat32.auth.backend.dto.*;
 import com.rbhagat32.auth.backend.entity.UserEntity;
+import com.rbhagat32.auth.backend.enums.RoleEnum;
 import com.rbhagat32.auth.backend.repository.UserRepository;
 import com.rbhagat32.auth.backend.security.JwtUtil;
 import com.rbhagat32.auth.backend.util.CloudinaryUtil;
@@ -32,8 +33,8 @@ public class AuthService {
             throw new RuntimeException("Email is already registered");
         }
 
-        Set<String> roles = new HashSet<>();
-        roles.add("ROLE_USER");
+        Set<RoleEnum> roles = new HashSet<>();
+        roles.add(RoleEnum.ROLE_USER);
 
         UserEntity user = new UserEntity();
         user.setName(body.getName());

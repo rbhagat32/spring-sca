@@ -5,6 +5,6 @@ type IUser = {
   avatarId: string;
   avatarUrl: string;
   roles: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 } | null;

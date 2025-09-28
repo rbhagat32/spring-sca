@@ -1,5 +1,6 @@
 package com.rbhagat32.auth.backend.entity;
 
+import com.rbhagat32.auth.backend.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,17 +24,24 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     private String name;
+
     @Column(nullable = false)
     private String email;
+
     private String password;
+
     private String avatarId;
     private String avatarUrl;
-    private Set<String> roles;
+
+    @Enumerated(EnumType.STRING)
+    private Set<RoleEnum> roles;
 
     @CreationTimestamp
     @Column(updatable = false)
     private Instant createdAt;
+
     @UpdateTimestamp
     private Instant updatedAt;
 
@@ -46,7 +54,7 @@ public class UserEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles
                 .stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> new SimpleGrantedAuthority(role.name()))
                 .toList();
     }
 }

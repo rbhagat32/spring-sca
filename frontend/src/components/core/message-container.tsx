@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
 import { SkeletonLoader } from "./skeleton-loader";
+import moment from "moment";
+import { isAdmin } from "@/helpers/check-admin";
 
 interface MessageContainerProps {
-  messages: string[];
+  messages: IMessage[];
   loading: boolean;
 }
 
@@ -30,7 +32,15 @@ export function MessageContainer({ messages, loading }: MessageContainerProps) {
             key={index}
             className="mx-auto w-[350px] rounded-2xl bg-zinc-800 px-3 py-2 text-gray-100 shadow-lg"
           >
-            <p className="text-sm break-words">{msg}</p>
+            <p className="mb-2 font-semibold break-words">{msg?.content}</p>
+            <p className="text-sm text-zinc-500">
+              {moment(msg?.createdAt).format("DD MMM YYYY [at] hh:mm A")}
+            </p>
+            <p className="text-sm text-zinc-500">
+              {"by "}
+              {msg?.sender?.name}
+              {isAdmin(msg?.sender!) && " (Admin)"}
+            </p>
           </div>
         ))
       )}
