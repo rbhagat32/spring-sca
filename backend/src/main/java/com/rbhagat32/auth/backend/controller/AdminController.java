@@ -17,7 +17,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @GetMapping("/all-users")
+    @GetMapping("/get-all-users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
     }

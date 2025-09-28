@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { SkeletonLoader } from "./skeleton-loader";
+import { PageLoader } from "../partials/page-loader";
 import moment from "moment";
 import { isAdmin } from "@/helpers/check-admin";
 
@@ -25,7 +25,7 @@ export function MessageContainer({ messages, loading }: MessageContainerProps) {
       className="flex-1 space-y-3 p-4"
     >
       {loading ? (
-        <SkeletonLoader />
+        <PageLoader />
       ) : (
         messages.map((msg, index) => (
           <div

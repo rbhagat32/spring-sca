@@ -1,5 +1,3 @@
-import { api } from "@/utils/axios";
-import { Client, type IMessage as StompMessageType } from "@stomp/stompjs";
 import {
   createContext,
   useCallback,
@@ -9,7 +7,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { api } from "@/utils/axios";
 import SockJS from "sockjs-client";
+import { Client, type IMessage as StompMessageType } from "@stomp/stompjs";
 import { useUser } from "./user-provider";
 import { toast } from "sonner";
 
@@ -44,13 +44,11 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
       onConnect: () => {
-        console.log("Connected to STOMP broker");
-        setIsConnected(true);
         setLoading(false);
+        setIsConnected(true);
 
+        // socket listeners
         stompClient.subscribe("/topic/message", (message: StompMessageType) => {
           const receivedMessage: IMessage = JSON.parse(message.body);
           console.log("Message Received from Server:", receivedMessage);
@@ -69,7 +67,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
           toast.error(`Message must be less than 100 characters !`);
         });
 
-        fetchMessages();
+        getAllMessages();
         getOnlineUsers();
       },
       onDisconnect: () => {
@@ -98,6 +96,26 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     setIsConnected(false);
   }, []);
 
+  useEffect(() => {
+    connect();
+
+    return () => {
+      disconnect();
+    };
+  }, [connect, disconnect]);
+
+  // attempt to reconnect every 5 seconds if disconnected
+  useEffect(() => {
+    if (!isConnected && !loading) {
+      const timer = setInterval(() => {
+        console.log("Attempting to reconnect...");
+        connect();
+      }, 5000);
+
+      return () => clearInterval(timer);
+    }
+  }, [isConnected, loading, connect]);
+
   const sendMessage: ISocketContext["sendMessage"] = useCallback((msg: string) => {
     console.log(`Sending Message to Server: ${msg}`);
 
@@ -111,7 +129,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const fetchMessages = useCallback(async () => {
+  const getAllMessages = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get<IMessage[]>(`/api/message/get-all-messages`);
@@ -134,26 +152,6 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       setLoading(false);
     }
   }, [onlineUsers]);
-
-  useEffect(() => {
-    connect();
-
-    return () => {
-      disconnect();
-    };
-  }, [connect, disconnect]);
-
-  // auto-reconnect when Socket connection is lost
-  useEffect(() => {
-    if (!isConnected && !loading) {
-      const timer = setTimeout(() => {
-        console.log("Attempting to reconnect...");
-        connect();
-      }, 5000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isConnected, loading, connect]);
 
   return (
     <SocketContext.Provider value={{ sendMessage, messages, onlineUsers, loading, isConnected }}>
