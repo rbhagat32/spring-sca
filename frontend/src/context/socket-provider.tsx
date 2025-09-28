@@ -15,10 +15,6 @@ import { toast } from "sonner";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
 
-interface SocketProviderProps {
-  children?: ReactNode;
-}
-
 interface ISocketContext {
   sendMessage: (msg: string) => void;
   messages: IMessage[];
@@ -29,7 +25,7 @@ interface ISocketContext {
 
 const SocketContext = createContext<ISocketContext | null>(null);
 
-const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
+const SocketProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
