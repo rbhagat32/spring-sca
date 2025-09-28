@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -15,7 +14,7 @@ import java.time.Instant;
 public class MessageEntity {
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.UUID) // this has to be disabled to set UUID manually inside controller
+    // @GeneratedValue(strategy = GenerationType.UUID) // set UUID manually inside controller
     private String id;
 
     private String content;
@@ -24,7 +23,7 @@ public class MessageEntity {
     @JoinColumn(name = "sender_id", nullable = false)
     private UserEntity sender;
 
-    @CreationTimestamp
+    // @CreationTimestamp // set createdAt manually inside controller
     @Column(updatable = false)
     private Instant createdAt;
 }

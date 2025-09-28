@@ -9,6 +9,7 @@ import com.rbhagat32.auth.backend.repository.MessageRepository;
 import com.rbhagat32.auth.backend.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class RealtimeMessageController {
 
     private final UserRepository userRepository;
@@ -29,6 +31,8 @@ public class RealtimeMessageController {
     @MessageMapping("/message")                                     // Client emits to:        /emit/message
     @SendTo("/topic/message")                                       // Server broadcasts to:   /topic/message
     public MessageDTO sendMessage(@Valid MessageRecvDTO message) {
+        log.info("Server: Realtime message received: {}", message);
+
         UserEntity sender = userRepository.findById(message.getSenderId())
                 .orElseThrow(() -> new UsernameNotFoundException("Sender not found"));
 
@@ -39,8 +43,7 @@ public class RealtimeMessageController {
         newMessage.setCreatedAt(Instant.now());
 
         // handle pub/sub or kafka here
-        // emit newMessage after converting to MessageDTO
-        
+
         MessageEntity savedMessage = messageRepository.save(newMessage);
 
         return new MessageDTO(
