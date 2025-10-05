@@ -22,12 +22,12 @@ public class OnlineUsersMap {
     // Map<userId, sessionId>
     private final Map<String, String> onlineUsers = new ConcurrentHashMap<>();
 
-    public void connect(String userId, String sessionId) {
-        onlineUsers.put(userId, sessionId);
+    public void addToOnlineUsersMap(String userId, String socketId) {
+        onlineUsers.put(userId, socketId);
     }
 
-    public void disconnect(String sessionId) {
-        onlineUsers.entrySet().removeIf(entry -> entry.getValue().equals(sessionId));
+    public void removeFromOnlineUsersMap(String socketId) {
+        onlineUsers.entrySet().removeIf(entry -> entry.getValue().equals(socketId));
     }
 
     public List<UserDTO> getOnlineUsers() {

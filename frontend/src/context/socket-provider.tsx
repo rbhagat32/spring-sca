@@ -102,7 +102,7 @@ const SocketProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const sendMessage: ISocketContext["sendMessage"] = useCallback((msg: string) => {
     if (stompClientRef.current && stompClientRef.current.connected) {
       stompClientRef.current.publish({
-        destination: "/emit/message",
+        destination: "/emit/message-scalable",
         body: JSON.stringify({ content: msg, senderId: user?.id }),
       });
     } else {
