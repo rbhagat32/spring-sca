@@ -30,17 +30,27 @@ export function MessageContainer({ messages, loading }: MessageContainerProps) {
         messages.map((msg, index) => (
           <div
             key={index}
-            className="mx-auto w-[350px] rounded-2xl bg-zinc-800 px-3 py-2 text-gray-100 shadow-lg"
+            className="mx-auto flex w-[350px] items-center justify-between rounded-2xl bg-zinc-800 px-5 py-3 text-gray-100 shadow-lg"
           >
-            <p className="mb-2 font-semibold break-words">{msg?.content}</p>
-            <p className="text-sm text-zinc-500">
-              {moment(msg?.createdAt).format("DD MMM YYYY [at] hh:mm A")}
-            </p>
-            <p className="text-sm text-zinc-500">
-              {"by "}
-              {msg?.sender?.name}
-              {isAdmin(msg?.sender!) && " (Admin)"}
-            </p>
+            <div>
+              <p className="mb-2 font-semibold break-words">{msg?.content}</p>
+              <p className="text-sm text-zinc-500">
+                {moment(msg?.createdAt).format("DD MMM YYYY [at] hh:mm A")}
+              </p>
+              <p className="text-sm text-zinc-500">
+                {"by "}
+                {msg?.sender?.name}
+                {isAdmin(msg?.sender!) && " (Admin)"}
+              </p>
+            </div>
+
+            <div className="size-12 overflow-hidden rounded-full">
+              <img
+                src={msg?.sender?.avatarUrl}
+                alt="Sender Profile Picture"
+                className="size-full object-cover"
+              />
+            </div>
           </div>
         ))
       )}

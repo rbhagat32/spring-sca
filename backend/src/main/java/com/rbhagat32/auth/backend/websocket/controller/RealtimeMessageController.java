@@ -42,8 +42,6 @@ public class RealtimeMessageController {
         newMessage.setSender(sender);
         newMessage.setCreatedAt(Instant.now());
 
-        // handle pub/sub or kafka here
-
         MessageEntity savedMessage = messageRepository.save(newMessage);
 
         return new MessageDTO(

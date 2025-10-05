@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "messages")
-public class MessageEntity {
+public class MessageEntity implements Serializable {
 
     @Id
     // @GeneratedValue(strategy = GenerationType.UUID) // set UUID manually inside controller

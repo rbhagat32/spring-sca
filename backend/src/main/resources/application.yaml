@@ -20,6 +20,10 @@ spring:
     multipart:
       max-file-size: 15MB
       max-request-size: 15MB
+  data:
+    redis:
+      host: localhost
+      port: 6380
 
 jwt:
   secret: dshbgfusdvfgesdfhlgbhljesdbgfhjkledbsghjklbedlhjkfbgbhjlearsjgf
