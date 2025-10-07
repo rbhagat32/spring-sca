@@ -1,5 +1,6 @@
 package com.rbhagat32.auth.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rbhagat32.auth.backend.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,7 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles
                 .stream()
