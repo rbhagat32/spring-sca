@@ -46,7 +46,7 @@ export function MessageContainer({ messages, loading }: MessageContainerProps) {
 
             <div className="size-12 overflow-hidden rounded-full">
               <img
-                src={msg?.sender?.avatarUrl}
+                src={msg?.sender?.avatarUrl || "/favicon.svg"}
                 alt="Sender Profile Picture"
                 className="size-full object-cover"
               />
