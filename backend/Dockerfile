@@ -10,13 +10,6 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jdk-alpine AS runner
 WORKDIR /app
 
-# Set timezone
-ENV TZ=Asia/Kolkata
-RUN apk add --no-cache tzdata \
-    && cp /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone \
-    && apk del tzdata
-
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
 
