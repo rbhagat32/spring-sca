@@ -5,7 +5,6 @@ import com.rbhagat32.auth.backend.entity.MessageEntity;
 import com.rbhagat32.auth.backend.entity.UserEntity;
 import com.rbhagat32.auth.backend.redis.RedisPublisher;
 import com.rbhagat32.auth.backend.repository.MessageRepository;
-import com.rbhagat32.auth.backend.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import java.util.UUID;
 @Slf4j
 public class ScalableMessageController {
 
-    private final UserRepository userRepository;
     private final MessageRepository messageRepository;
     private final RedisPublisher pub;
 
