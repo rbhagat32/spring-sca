@@ -162,7 +162,7 @@ export const DropzoneEmptyState = ({
   let caption = "";
 
   if (accept) {
-    caption += "Accepts ";
+    caption += "Accepts: ";
     caption += new Intl.ListFormat("en").format(Object.keys(accept));
   }
 
@@ -180,7 +180,6 @@ export const DropzoneEmptyState = ({
         <UploadIcon size={16} />
       </div>
       <p className="my-2 w-full truncate text-sm font-medium text-wrap">Upload {title}</p>
-      <p className="text-muted-foreground text-xs text-wrap">Accepted formats: JPG, JPEG, PNG</p>
       <p className="text-muted-foreground text-xs text-wrap">(Max Size: 10MB)</p>
     </div>
   );

@@ -66,7 +66,7 @@ export function SignUpPage() {
                 <Input id="password" name="password" type="password" required />
               </div>
               <Dropzone
-                accept={{ "image/png": [], "image/jpeg": [], "image/jpg": [] }}
+                accept={{ "image/*": [] }}
                 onDrop={handleDrop}
                 onError={console.error}
                 src={files}
