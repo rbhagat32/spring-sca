@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres
-    container_name: spring-pg
+    container_name: postgres
     environment:
       POSTGRES_USER: raghav
       POSTGRES_PASSWORD: password
@@ -16,7 +16,7 @@ services:
 
   redis:
     image: redis
-    container_name: spring-redis
+    container_name: redis
     volumes:
       - redis_dump:/data
     healthcheck:
@@ -27,7 +27,7 @@ services:
 
   kafka:
     image: bitnami/kafka
-    container_name: spring-kafka
+    container_name: kafka
     environment:
       KAFKA_ENABLE_KRAFT: yes
       KAFKA_CFG_NODE_ID: 1
@@ -53,6 +53,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: backend
     ports:
       - "8080:8080"
     depends_on:
@@ -62,6 +63,18 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
 
 volumes:
   pg_data:
