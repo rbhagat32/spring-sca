@@ -106,8 +106,6 @@ export type DropzoneContentProps = {
   className?: string;
 };
 
-const maxLabelItems = 3;
-
 export const DropzoneContent = ({ children, className }: DropzoneContentProps) => {
   const { src } = useDropzoneContext();
 
@@ -125,11 +123,7 @@ export const DropzoneContent = ({ children, className }: DropzoneContentProps) =
         <UploadIcon size={16} />
       </div>
       <p className="my-2 w-full truncate text-sm font-medium">
-        {src.length > maxLabelItems
-          ? `${new Intl.ListFormat("en").format(
-              src.slice(0, maxLabelItems).map((file) => file.name)
-            )} and ${src.length - maxLabelItems} more`
-          : new Intl.ListFormat("en").format(src.map((file) => file.name))}
+        {new Intl.ListFormat("en").format(src.map((file) => file.name)).slice(0, 25)}
       </p>
       <p className="text-muted-foreground w-full text-xs text-wrap">
         Drag and drop or click to replace
