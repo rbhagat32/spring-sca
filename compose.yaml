@@ -9,7 +9,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U raghav -d spring-auth" ]
+      test: ["CMD-SHELL", "pg_isready -U raghav -d spring-auth"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -20,11 +20,10 @@ services:
     volumes:
       - redis_dump:/data
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 10s
 
   kafka:
     image: bitnami/kafka
@@ -40,17 +39,20 @@ services:
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
       ALLOW_PLAINTEXT_LISTENER: yes
     healthcheck:
-      test: [ "CMD-SHELL", "kafka-broker-api-versions.sh --bootstrap-server kafka:9092 || exit 1" ]
+      test:
+        [
+          "CMD-SHELL",
+          "kafka-broker-api-versions.sh --bootstrap-server kafka:9092 || exit 1",
+        ]
       interval: 10s
       timeout: 10s
       retries: 10
       start_period: 20s
 
-  springboot:
+  backend:
     build:
-      context: ./
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: spring-app
     ports:
       - "8080:8080"
     depends_on:
