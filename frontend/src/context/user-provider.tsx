@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 type UserContextType = {
   user: IUser;
   loading: boolean;
+  submitting: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string, avatar?: File) => Promise<void>;
   logout: () => void;
@@ -13,26 +14,28 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<IUser>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     getLoggedInUser();
   }, []);
 
   const login = async (email: string, password: string) => {
-    setLoading(true);
+    setSubmitting(true);
     try {
       await api.post("/api/auth/login", { email, password });
       await getLoggedInUser();
     } catch (err) {
       console.error(err);
+      throw err;
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   const signup = async (name: string, email: string, password: string, avatar?: File) => {
-    setLoading(true);
+    setSubmitting(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -49,21 +52,19 @@ function UserProvider({ children }: { children: ReactNode }) {
       await getLoggedInUser();
     } catch (err) {
       console.error(err);
+      throw err;
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   const logout = async () => {
-    setLoading(true);
     try {
       await api.post("/api/auth/logout");
       setUser(null);
     } catch (err) {
       console.error(err);
       setUser(null);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -81,7 +82,7 @@ function UserProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, login, signup, logout }}>
+    <UserContext.Provider value={{ user, loading, submitting, login, signup, logout }}>
       {children}
     </UserContext.Provider>
   );

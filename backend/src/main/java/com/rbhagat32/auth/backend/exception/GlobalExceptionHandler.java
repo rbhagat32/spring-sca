@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -137,23 +134,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         log.error(ex.getMessage(), ex);
 
-        Map<String, String> validationErrors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
-            validationErrors.put(fieldName, message);
-        });
-
-        String combinedMessage = validationErrors.values()
-                .stream()
-                .distinct()
-                .collect(Collectors.joining("; "));
+        FieldError error = ex.getBindingResult().getFieldErrors().stream().findFirst().orElse(null);
+        String message = error != null ? error.getDefaultMessage() : "Validation failed";
 
         ApiError apiError = new ApiError(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST,
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                combinedMessage,
+                message,
                 request.getRequestURI()
         );
 

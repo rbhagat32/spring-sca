@@ -9,6 +9,7 @@ import com.rbhagat32.auth.backend.util.CloudinaryUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +31,7 @@ public class AuthService {
 
     public AuthResponseDTO register(RegisterRequestDTO body, MultipartFile avatar) {
         if (userRepository.findByEmail(body.getEmail()).isPresent()) {
-            throw new RuntimeException("Email is already registered");
+            throw new BadCredentialsException("Email is already registered");
         }
 
         Set<RoleEnum> roles = new HashSet<>();
@@ -59,10 +60,10 @@ public class AuthService {
 
     public AuthResponseDTO login(LoginRequestDTO body) {
         UserEntity user = userRepository.findByEmail(body.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid email"));
 
         if (!passwordEncoder.matches(body.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new BadCredentialsException("Invalid password");
         }
 
         String token = jwtUtil.generateToken(user);

@@ -4,24 +4,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-provider";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export function LoginPage() {
-  const { loading, login } = useUser();
+  const { submitting, login } = useUser();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (loading) return;
-    const formData = new FormData(e.currentTarget);
+    if (submitting) return;
+
+    const form = e.currentTarget.closest("form");
+    if (!form) return;
+
+    const formData = new FormData(form);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    await login(email, password);
+
+    try {
+      await login(email, password);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Login failed. Check credentials.");
+    }
   };
 
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form onSubmit={handleSubmit} className="p-6 md:p-8">
+          <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome</h1>
@@ -45,7 +55,7 @@ export function LoginPage() {
                 </div>
                 <Input id="password" name="password" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="button" className="w-full" onClick={handleSubmit} disabled={submitting}>
                 Login
               </Button>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

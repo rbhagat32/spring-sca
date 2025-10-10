@@ -6,19 +6,29 @@ import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-provider";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export function SignUpPage() {
-  const { loading, signup } = useUser();
+  const { submitting, signup } = useUser();
   const [files, setFiles] = useState<File[] | undefined>();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (loading) return;
-    const formData = new FormData(e.currentTarget);
+    if (submitting) return;
+
+    const form = e.currentTarget.closest("form");
+    if (!form) return;
+
+    const formData = new FormData(form);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    await signup(name, email, password, files?.[0]);
+
+    try {
+      await signup(name, email, password, files?.[0]);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Sign Up failed. Try again.");
+    }
   };
 
   const handleDrop = (files: File[]) => {
@@ -37,7 +47,7 @@ export function SignUpPage() {
             />
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 md:p-8">
+          <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome</h1>
@@ -74,7 +84,7 @@ export function SignUpPage() {
                 <DropzoneEmptyState />
                 <DropzoneContent />
               </Dropzone>
-              <Button type="submit" className="w-full">
+              <Button type="button" className="w-full" onClick={handleSubmit} disabled={submitting}>
                 Sign up
               </Button>
               <div className="text-center text-sm">
