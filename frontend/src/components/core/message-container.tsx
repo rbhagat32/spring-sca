@@ -5,10 +5,11 @@ import { isAdmin } from "@/helpers/check-admin";
 
 interface MessageContainerProps {
   messages: IMessage[];
+  onlineUsers: IUser[];
   loading: boolean;
 }
 
-export function MessageContainer({ messages, loading }: MessageContainerProps) {
+export function MessageContainer({ messages, onlineUsers, loading }: MessageContainerProps) {
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -44,7 +45,9 @@ export function MessageContainer({ messages, loading }: MessageContainerProps) {
               </p>
             </div>
 
-            <div className="size-12 overflow-hidden rounded-full">
+            <div
+              className={`size-12 overflow-hidden rounded-full ${onlineUsers.some((user) => user?.id === msg?.sender?.id) && "ring-2 ring-green-500"}`}
+            >
               <img
                 src={msg?.sender?.avatarUrl || "/favicon.svg"}
                 alt="Sender Profile Picture"

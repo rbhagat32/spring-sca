@@ -9,7 +9,7 @@ export function HomePage() {
   return (
     <section className="relative">
       <OnlineUsers onlineUsers={onlineUsers} />
-      <MessageContainer messages={messages} loading={loading} />
+      <MessageContainer messages={messages} onlineUsers={onlineUsers} loading={loading} />
       <MessageInput sendMessage={sendMessage} />
     </section>
   );
