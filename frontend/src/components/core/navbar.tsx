@@ -18,7 +18,7 @@ const NavBar = () => {
           </div>
           <h1 className="text-xl font-semibold tracking-tighter">
             {user?.name}
-            {isAdmin(user) && " (Admin)"}
+            {isAdmin(user) && <span className="text-blue-500"> (Admin)</span>}
           </h1>
         </div>
       </div>

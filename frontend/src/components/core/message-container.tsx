@@ -41,7 +41,9 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
               <p className="text-sm text-zinc-500">
                 {"by "}
                 {msg?.sender?.name}
-                {isAdmin(msg?.sender!) && " (Admin)"}
+                {isAdmin(msg?.sender!) && (
+                  <span className="font-semibold text-blue-500"> (Admin)</span>
+                )}
               </p>
             </div>
 
