@@ -1,10 +1,10 @@
 package com.rbhagat32.auth.backend.websocket;
 
 import com.rbhagat32.auth.backend.entity.UserEntity;
+import com.rbhagat32.auth.backend.redis.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 public class WebSocketEventListener {
 
     private final OnlineUsersMap onlineUsersMap;
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final RedisPublisher pub;
 
     @EventListener
     public void handleWebSocketConnect(SessionConnectEvent event) {
@@ -29,7 +29,7 @@ public class WebSocketEventListener {
             String userId = user.getId();
 
             onlineUsersMap.addToOnlineUsersMap(userId, socketId);
-            simpMessagingTemplate.convertAndSend("/topic/online-users", onlineUsersMap.getOnlineUsers());
+            pub.refreshOnlineUsers();
 
             log.info("✅ User connected: {} -> {}", userId, socketId);
         }
@@ -41,7 +41,7 @@ public class WebSocketEventListener {
         String sessionId = accessor.getSessionId();
 
         onlineUsersMap.removeFromOnlineUsersMap(sessionId);
-        simpMessagingTemplate.convertAndSend("/topic/online-users", onlineUsersMap.getOnlineUsers());
+        pub.refreshOnlineUsers();
 
         log.info("❌ User disconnected: {}", sessionId);
     }

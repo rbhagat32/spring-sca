@@ -11,10 +11,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RedisPublisher {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public void publish(String channel, MessageEntity message) {
+    public void publishMessage(String channel, MessageEntity message) {
         log.info("Publishing to Redis channel {}: {}", channel, message);
         redisTemplate.convertAndSend(channel, message);
+    }
+
+    public void refreshOnlineUsers() {
+        log.info("Publishing Online Users to Redis");
+        redisTemplate.convertAndSend("ONLINE_USERS", "REFRESH");
     }
 }

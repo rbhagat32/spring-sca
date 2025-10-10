@@ -37,7 +37,7 @@ public class ScalableMessageController {
                 Instant.now()
         );
 
-        pub.publish("MESSAGES", newMessage);
+        pub.publishMessage("MESSAGES", newMessage);
         producer.produceMessage(newMessage);
     }
 }

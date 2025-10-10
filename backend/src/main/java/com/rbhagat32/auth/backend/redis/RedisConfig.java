@@ -18,19 +18,22 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfig {
 
-    private final RedisSubscriber redisSubscriber;
+    private final RedisSubscriber sub;
 
     @Bean
     public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(redisSubscriber, new ChannelTopic("MESSAGES"));
+
+        container.addMessageListener(sub, new ChannelTopic("MESSAGES"));
+        container.addMessageListener(sub, new ChannelTopic("ONLINE_USERS"));
+
         return container;
     }
 
     @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-        return new MessageListenerAdapter(subscriber, "onMessage");
+    public MessageListenerAdapter listenerAdapter(RedisSubscriber sub) {
+        return new MessageListenerAdapter(sub, "onMessage");
     }
 
     @Bean
@@ -42,7 +45,7 @@ public class RedisConfig {
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
-        // JSON Serializer for Values
+        // JSON Serializer
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule()); // handle Instant, LocalDateTime, etc.
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
