@@ -5,11 +5,11 @@ services:
     environment:
       POSTGRES_USER: raghav
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: spring-auth
+      POSTGRES_DB: spring-sca
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U raghav -d spring-auth"]
+      test: ["CMD-SHELL", "pg_isready -U raghav -d spring-sca"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -18,7 +18,7 @@ services:
     image: redis
     container_name: redis
     volumes:
-      - redis_dump:/data
+      - redis-dump:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -107,5 +107,5 @@ services:
           path: package.json
 
 volumes:
-  pg_data:
-  redis_dump:
+  pg-data:
+  redis-dump:

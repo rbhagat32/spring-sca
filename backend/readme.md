@@ -3,7 +3,7 @@
 ## 1) Postgres
 
 ```
-docker run -d --name spring-pg -p 5430:5432 -e POSTGRES_USER=raghav -e POSTGRES_PASSWORD=password -e POSTGRES_DB=spring-auth -v spring-pg:/var/lib/postgresql/data postgres
+docker run -d --name spring-pg -p 5430:5432 -e POSTGRES_USER=raghav -e POSTGRES_PASSWORD=password -e POSTGRES_DB=spring-sca -v spring-pg:/var/lib/postgresql/data postgres
 ```
 
 ### If getting TimeZone error while connecting to Postgres, follow these steps in IntelliJ Idea:
