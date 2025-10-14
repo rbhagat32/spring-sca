@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RedisPublisher {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void publishMessage(String channel, MessageEntity message) {
         log.info("Publishing to Redis channel {}: {}", channel, message);
@@ -20,6 +20,6 @@ public class RedisPublisher {
 
     public void refreshOnlineUsers() {
         log.info("Publishing Online Users to Redis");
-        redisTemplate.convertAndSend("ONLINE_USERS", "REFRESH");
+        redisTemplate.convertAndSend("ONLINE_USERS", "REFRESH"); // REFRESH is a String, so serializer will add \" in start and end
     }
 }
