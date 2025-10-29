@@ -43,10 +43,10 @@ spring:
 
 jwt:
   secret: dshbgfusdvfgesdfhlgbhljesdbgfhjkledbsghjklbedlhjkfbgbhjlearsjgf
-  expiration: 86400000 # JWT uses time in milliseconds (1 day = 86400000 ms)
+  expiration: 1296000000 # JWT uses time in milliseconds
 
 cookie:
-  expiration: 86400 # Cookie uses time in seconds (1 day = 86400 seconds)
+  expiration: 12960000 # Cookie uses time in seconds
 
 cloudinary:
   cloud-name: dkyxlrmcg
