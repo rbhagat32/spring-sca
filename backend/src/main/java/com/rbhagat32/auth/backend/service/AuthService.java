@@ -58,7 +58,7 @@ public class AuthService {
         UserEntity savedUser = userRepository.save(user);
         String token = jwtUtil.generateToken(savedUser);
 
-        producer.produceWelcomeEmail(savedUser.getEmail());
+        producer.produceWelcomeEmail(savedUser);
 
         return new AuthResponseDTO(token, modelMapper.map(savedUser, UserDTO.class));
     }

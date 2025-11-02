@@ -1,10 +1,12 @@
 package com.rbhagat32.auth.backend.kafka;
 
 import com.rbhagat32.auth.backend.entity.WelcomeEmailEntity;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +19,19 @@ public class WelcomeEmailConsumer {
     public void consumeWelcomeEmail(WelcomeEmailEntity welcomeEmail) {
         System.out.println("Welcome Email Consumed from Kafka: " + welcomeEmail);
 
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(welcomeEmail.getTo());
-        email.setSubject(welcomeEmail.getSubject());
-        email.setText(welcomeEmail.getBody());
-        javaMailSender.send(email);
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
 
-        System.out.println("Welcome Email sent to: " + welcomeEmail.getTo());
+            helper.setTo(welcomeEmail.getTo());
+            helper.setSubject(welcomeEmail.getSubject());
+            helper.setText(welcomeEmail.getBody(), true);
+
+            javaMailSender.send(message);
+            System.out.println("Welcome Email sent to: " + welcomeEmail.getTo());
+
+        } catch (MessagingException e) {
+            System.err.println("Failed to send welcome email to: " + welcomeEmail.getTo());
+        }
     }
 }
