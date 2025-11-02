@@ -3,7 +3,7 @@ package com.rbhagat32.auth.backend.websocket.controller;
 import com.rbhagat32.auth.backend.dto.MessageRecvDTO;
 import com.rbhagat32.auth.backend.entity.MessageEntity;
 import com.rbhagat32.auth.backend.entity.UserEntity;
-import com.rbhagat32.auth.backend.kafka.KafkaProducer;
+import com.rbhagat32.auth.backend.kafka.MessageProducer;
 import com.rbhagat32.auth.backend.redis.RedisPublisher;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class ScalableMessageController {
 
     private final RedisPublisher pub;
-    private final KafkaProducer producer;
+    private final MessageProducer producer;
 
     @MessageMapping("/message-scalable")
     public void sendMessage(@Valid MessageRecvDTO message, SimpMessageHeaderAccessor headerAccessor) {

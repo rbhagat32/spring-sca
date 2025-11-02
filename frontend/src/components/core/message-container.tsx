@@ -31,7 +31,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
         messages.map((msg, index) => (
           <div
             key={index}
-            className="mx-auto flex w-[350px] items-center justify-between rounded-2xl bg-zinc-800 px-5 py-3 text-gray-100 shadow-lg"
+            className="mx-auto flex w-[350px] items-center justify-between rounded-2xl bg-zinc-800 px-5 py-3 text-zinc-100 shadow-lg"
           >
             <div>
               <p className="mb-2 font-semibold break-words">{msg?.content}</p>
@@ -40,7 +40,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
               </p>
               <p className="text-sm text-zinc-500">
                 {"by "}
-                {msg?.sender?.name}
+                <span className="text-zinc-300">{msg?.sender?.name}</span>
                 {isAdmin(msg?.sender!) && (
                   <span className="font-semibold text-blue-500"> (Admin)</span>
                 )}

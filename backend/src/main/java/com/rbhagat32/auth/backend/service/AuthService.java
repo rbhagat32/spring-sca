@@ -3,6 +3,7 @@ package com.rbhagat32.auth.backend.service;
 import com.rbhagat32.auth.backend.dto.*;
 import com.rbhagat32.auth.backend.entity.UserEntity;
 import com.rbhagat32.auth.backend.enums.RoleEnum;
+import com.rbhagat32.auth.backend.kafka.WelcomeEmailProducer;
 import com.rbhagat32.auth.backend.repository.UserRepository;
 import com.rbhagat32.auth.backend.security.JwtUtil;
 import com.rbhagat32.auth.backend.util.CloudinaryUtil;
@@ -28,6 +29,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final CloudinaryUtil cloudinaryUtil;
     private final ModelMapper modelMapper;
+    private final WelcomeEmailProducer producer;
 
     public AuthResponseDTO register(RegisterRequestDTO body, MultipartFile avatar) {
         if (userRepository.findByEmail(body.getEmail()).isPresent()) {
@@ -55,7 +57,10 @@ public class AuthService {
 
         UserEntity savedUser = userRepository.save(user);
         String token = jwtUtil.generateToken(savedUser);
-        return new AuthResponseDTO(token, modelMapper.map(user, UserDTO.class));
+
+        producer.produceWelcomeEmail(savedUser.getEmail());
+
+        return new AuthResponseDTO(token, modelMapper.map(savedUser, UserDTO.class));
     }
 
     public AuthResponseDTO login(LoginRequestDTO body) {

@@ -11,4 +11,9 @@ public class KafkaTopicConfig {
     public NewTopic messageTopic() {
         return new NewTopic("MESSAGES", 1, (short) 1);
     }
+
+    @Bean
+    public NewTopic welcomeEmailTopic() {
+        return new NewTopic("WELCOME_EMAILS", 1, (short) 1);
+    }
 }
