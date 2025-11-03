@@ -25,7 +25,7 @@ public class RedisSubscriber implements MessageListener {
 
         if (channel.equals("MESSAGES")) {
             simpMessagingTemplate.convertAndSend("/topic/message", json);
-        } else if (channel.equals("ONLINE_USERS") && json.equals("\"REFRESH\"")) { // serializer adds \" before and after the String
+        } else if (channel.equals("ONLINE_USERS") && json.equals("\"REFRESH\"")) { // JSON serializer adds \" before and after the String
             simpMessagingTemplate.convertAndSend("/topic/online-users", onlineUsersMap.getOnlineUsers());
             log.info("🔁 Broadcasted updated online users list to /topic/online-users");
         }

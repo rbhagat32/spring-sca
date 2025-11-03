@@ -20,6 +20,6 @@ public class RedisPublisher {
 
     public void refreshOnlineUsers() {
         log.info("Publishing Online Users to Redis");
-        redisTemplate.convertAndSend("ONLINE_USERS", "REFRESH"); // REFRESH is a String, so serializer will add \" in start and end
+        redisTemplate.convertAndSend("ONLINE_USERS", "REFRESH"); // REFRESH is a String, so JSON serializer will add \" in start and end
     }
 }
