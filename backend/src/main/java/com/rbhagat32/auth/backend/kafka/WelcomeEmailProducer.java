@@ -17,7 +17,7 @@ public class WelcomeEmailProducer {
 
         String body = String.format("""
                     <div style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #f9fafb; padding: 24px; border-radius: 10px; color: #333; line-height: 1.6;">
-                        <h2 style="color: #1a202c;">Welcome to Spring-SCA</h2>
+                        <h2 style="color: #1a202c;">Welcome to Spring-SCA !</h2>
                         <p>Hi %s,</p>
                 
                         <p>We’re thrilled to have you join our growing community !</p>

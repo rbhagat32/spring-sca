@@ -41,14 +41,12 @@ function UserProvider({ children }: { children: ReactNode }) {
       formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
-
-      if (avatar) {
-        formData.append("avatar", avatar);
-      }
+      if (avatar) formData.append("avatar", avatar);
 
       await api.post("/api/auth/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       await getLoggedInUser();
     } catch (err) {
       console.error(err);
