@@ -30,6 +30,10 @@ public class ScalableMessageController {
 
         UserEntity sender = (UserEntity) ((Authentication) headerAccessor.getUser()).getPrincipal();
 
+        if (!message.getSenderId().equals(sender.getId())) {
+            throw new RuntimeException("Sender Id mismatch");
+        }
+
         MessageEntity newMessage = new MessageEntity(
                 UUID.randomUUID().toString(),
                 message.getContent(),
