@@ -9,7 +9,9 @@ import { toast } from "sonner";
 export function LoginPage() {
   const { submitting, login } = useUser();
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLFormElement | HTMLInputElement>
+  ) => {
     e.preventDefault();
     if (submitting) return;
 
@@ -31,7 +33,12 @@ export function LoginPage() {
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form
+            className="p-6 md:p-8"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSubmit(e);
+            }}
+          >
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome</h1>
