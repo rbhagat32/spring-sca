@@ -119,7 +119,7 @@
   }
 }
 
-/* Scrollbar */
+/* scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -131,4 +131,8 @@
 ::-webkit-scrollbar-thumb {
   background-color: rgb(161 161 170);
   border-radius: 50px;
+}
+
+img {
+  -webkit-user-drag: none;
 }
