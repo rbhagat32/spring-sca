@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "@/utils/protected-route";
-import { NotFound } from "@/components/partials/page-not-found";
+import { NotFound } from "@/components/custom/page-not-found";
 import { HomePage } from "@/pages/home";
 import { AuthLayout } from "@/layouts/auth";
 import { LoginPage } from "@/pages/login";

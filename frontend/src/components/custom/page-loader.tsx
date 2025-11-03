@@ -1,4 +1,4 @@
-import styles from "@/components/partials/page-loader.module.css";
+import styles from "@/components/custom/page-loader.module.css";
 
 const PageLoader = ({ fullScreen = false }: { fullScreen?: boolean }) => {
   return (
@@ -7,7 +7,7 @@ const PageLoader = ({ fullScreen = false }: { fullScreen?: boolean }) => {
         fullScreen ? "fixed h-screen w-screen" : "h-full w-full"
       } grid place-items-center`}
     >
-      <div className={styles.loader}></div>
+      <div className={styles.loader} />
     </div>
   );
 };

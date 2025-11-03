@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import { PageLoader } from "../partials/page-loader";
-import moment from "moment";
+import { PageLoader } from "@/components/custom/page-loader";
 import { isAdmin } from "@/helpers/check-admin";
+import moment from "moment";
+import { useEffect, useRef } from "react";
 
 interface MessageContainerProps {
   messages: IMessage[];
@@ -34,7 +34,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
             className="mx-auto flex w-[350px] items-center justify-between rounded-2xl bg-zinc-800 px-5 py-3 text-zinc-100 shadow-lg"
           >
             <div>
-              <p className="mb-2 font-semibold break-words">{msg?.content}</p>
+              <p className="mb-2 font-semibold wrap-break-word">{msg?.content}</p>
               <p className="text-sm text-zinc-500">
                 {moment(msg?.createdAt).format("DD MMM YYYY [at] hh:mm A")}
               </p>

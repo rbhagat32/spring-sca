@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/dropzone";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-provider";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useState } from "react";
+import { ImageUpload } from "@/components/custom/image-upload";
 
 export function SignUpPage() {
   const { submitting, signup } = useUser();
-  const [files, setFiles] = useState<File[] | undefined>();
+  const [file, setFile] = useState<File | null>(null);
 
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLFormElement | HTMLInputElement>
@@ -27,14 +27,10 @@ export function SignUpPage() {
     const password = formData.get("password") as string;
 
     try {
-      await signup(name, email, password, files?.[0]);
+      await signup(name, email, password, file!);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Sign Up failed. Try again.");
     }
-  };
-
-  const handleDrop = (files: File[]) => {
-    setFiles(files);
   };
 
   return (
@@ -62,14 +58,17 @@ export function SignUpPage() {
                   Create a new <span className="underline">Scalable Chat App</span> account
                 </p>
               </div>
+
               <div className="grid gap-3">
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" name="name" type="text" required />
               </div>
+
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" name="email" type="email" required />
               </div>
+
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
@@ -82,18 +81,13 @@ export function SignUpPage() {
                 </div>
                 <Input id="password" name="password" type="password" required />
               </div>
-              <Dropzone
-                accept={{ "image/*": [] }}
-                onDrop={handleDrop}
-                onError={console.error}
-                src={files}
-              >
-                <DropzoneEmptyState />
-                <DropzoneContent />
-              </Dropzone>
+
+              <ImageUpload onFileChange={setFile} />
+
               <Button type="button" className="w-full" onClick={handleSubmit} disabled={submitting}>
                 Sign up
               </Button>
+
               <div className="text-center text-sm">
                 Already have an account?{" "}
                 <Link to="/login" className="underline underline-offset-4">

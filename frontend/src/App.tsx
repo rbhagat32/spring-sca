@@ -1,5 +1,5 @@
 import { Routing } from "@/utils/routing";
-import { PageLoader } from "@/components/partials/page-loader";
+import { PageLoader } from "@/components/custom/page-loader";
 import { Toaster } from "sonner";
 import { useUser } from "@/context/user-provider";
 
