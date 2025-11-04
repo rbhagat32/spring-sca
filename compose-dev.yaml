@@ -62,7 +62,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     depends_on:
       postgres:
         condition: service_healthy
@@ -70,20 +70,39 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+          ignore:
+            - target/
+            - "**/mvnw"
+            - "**/mvnw.cmd"
+            - "**/.mvn/"
+        - action: rebuild
+          path: ./backend/pom.xml
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        VITE_BACKEND_URL: http://localhost:8080
+      dockerfile: Dockerfile.dev
     container_name: frontend
     ports:
-      - "3000:3000"
+      - "5173:5173"
     env_file:
       - ./frontend/.env
     depends_on:
       - nginx
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
 
 volumes:
   pg-data:
