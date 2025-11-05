@@ -67,7 +67,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION=https://sca.void9.space/api/login/oauth2/code/google
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_REDIRECT-URI=https://sca.void9.space/api/login/oauth2/code/google
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_REDIRECT-URI=https://sca.void9.space/api/login/oauth2/code/github
     depends_on:
       postgres:
         condition: service_healthy

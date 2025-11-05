@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -52,10 +50,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String frontendUrl = Objects.equals(SPRING_PROFILES_ACTIVE, "prod") ? FRONTEND_URL_PROD : FRONTEND_URL_DEV;
 
-        response.setStatus(HttpStatus.OK.value());
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(objectMapper.writeValueAsString(authResponse));
         response.sendRedirect(frontendUrl);
     }
 }

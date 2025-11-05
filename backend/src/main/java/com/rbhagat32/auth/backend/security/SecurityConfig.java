@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -42,6 +43,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomUserDetailsService customUserDetailsService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,13 +60,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl(frontendUrl, true)
+                        .authorizationEndpoint(auth -> auth
+                                .baseUri("/oauth2/authorization")
+                                .authorizationRequestRepository(authorizationRequestRepository())
+                        )
                         .successHandler(oAuth2SuccessHandler)
-                        .failureHandler(
-                                (req, res, ex) -> {
-                                    System.out.println("OAuth2 Error" + ex.getMessage());
-                                }
-                        ))
+                        .failureHandler(oAuth2FailureHandler))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(jwtEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)
@@ -104,5 +105,10 @@ public class SecurityConfig {
                 .passwordEncoder(passwordEncoder);
 
         return authBuilder.build();
+    }
+
+    @Bean
+    public HttpSessionOAuth2AuthorizationRequestRepository authorizationRequestRepository() {
+        return new HttpSessionOAuth2AuthorizationRequestRepository();
     }
 }
