@@ -78,7 +78,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_BACKEND_URL: https://sca.void9.space
+        VITE_BACKEND_URL: http://localhost:8080
     container_name: frontend
     ports:
       - "5173:5173"
