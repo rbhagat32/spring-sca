@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +30,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    @Value("${spring.profiles.active}")
+    private String SPRING_PROFILES_ACTIVE;
     @Value("${frontend.url.dev}")
     private String FRONTEND_URL_DEV;
     @Value("${frontend.url.prod}")
@@ -38,19 +41,30 @@ public class SecurityConfig {
     private final JwtEntryPoint jwtEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomUserDetailsService customUserDetailsService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String frontendUrl = Objects.equals(SPRING_PROFILES_ACTIVE, "prod") ? FRONTEND_URL_PROD : FRONTEND_URL_DEV;
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(corsConfig()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl(frontendUrl, true)
+                        .successHandler(oAuth2SuccessHandler)
+                        .failureHandler(
+                                (req, res, ex) -> {
+                                    System.out.println("OAuth2 Error" + ex.getMessage());
+                                }
+                        ))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(jwtEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)

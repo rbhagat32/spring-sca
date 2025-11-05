@@ -1,6 +1,7 @@
 package com.rbhagat32.auth.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rbhagat32.auth.backend.enums.OAuth2ProviderEnum;
 import com.rbhagat32.auth.backend.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "users")
+@Table(indexes = {
+        @Index(name = "provider", columnList = "providerId, providerType")
+})
 public class UserEntity implements UserDetails {
 
     @Id
@@ -35,6 +39,10 @@ public class UserEntity implements UserDetails {
 
     private String avatarId;
     private String avatarUrl;
+
+    private String providerId;
+    @Enumerated(EnumType.STRING)
+    private OAuth2ProviderEnum providerType;
 
     @Enumerated(EnumType.STRING)
     private Set<RoleEnum> roles;

@@ -11,9 +11,9 @@ This guide explains how to deploy **Spring SCA** on **AWS EC2** using Docker and
 Build the Docker images locally and push them to Docker Hub.
 
 ```bash
-   docker build -t rbhagat32/spring-sca-frontend   --build-arg VITE_BACKEND_URL=https://sca.void9.space ./frontend
+   docker build -t rbhagat32/spring-sca-frontend --build-arg VITE_BACKEND_URL=https://sca.void9.space ./frontend
 
-   docker build -t rbhagat32/spring-sca-backend ./backend
+   docker build -t rbhagat32/spring-sca-backend --build-arg SPRING_PROFILES_ACTIVE=prod ./backend
 
    docker push rbhagat32/spring-sca-frontend
    docker push rbhagat32/spring-sca-backend

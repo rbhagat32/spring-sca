@@ -65,6 +65,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION=https://sca.void9.space/api/login/oauth2/code/google
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,12 +1,14 @@
 package com.rbhagat32.auth.backend.security;
 
 import com.rbhagat32.auth.backend.entity.UserEntity;
+import com.rbhagat32.auth.backend.enums.OAuth2ProviderEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -64,5 +66,40 @@ public class JwtUtil {
         return userIdFromToken != null &&
                 !isTokenExpired(token) &&
                 userIdFromToken.equals(userIdFromDB);
+    }
+
+    public OAuth2ProviderEnum getProviderTypeFromRegistrationId(String registrationId) {
+        return switch (registrationId.toLowerCase()) {
+            case "google" -> OAuth2ProviderEnum.GOOGLE;
+            case "github" -> OAuth2ProviderEnum.GITHUB;
+            default -> throw new IllegalArgumentException("Unsupported OAuth2 Provider: " + registrationId);
+        };
+    }
+
+    public String getProviderIdFromOAuth2User(OAuth2User user, String registrationId) {
+        String providerId = switch (registrationId.toLowerCase()) {
+            case "google" -> user.getAttribute("sub");
+            case "github" -> user.getAttribute("id").toString();
+
+            default -> {
+                log.error("Unsupported OAuth2 provider: {}", registrationId);
+                throw new IllegalArgumentException("Unsupported OAuth2 Provider: " + registrationId);
+            }
+        };
+
+        if (providerId == null || providerId.isBlank()) {
+            log.error("Unable to determine providerId for Provider: {}", registrationId);
+            throw new IllegalArgumentException("Unable to determine providerId for OAuth2 login");
+        }
+
+        return providerId;
+    }
+
+    public String getAvatarUrl(OAuth2User user, String registrationId) {
+        return switch (registrationId.toLowerCase()) {
+            case "google" -> user.getAttribute("picture");
+            case "github" -> user.getAttribute("avatar_url");
+            default -> null;
+        };
     }
 }

@@ -2,6 +2,7 @@ package com.rbhagat32.auth.backend.service;
 
 import com.rbhagat32.auth.backend.dto.*;
 import com.rbhagat32.auth.backend.entity.UserEntity;
+import com.rbhagat32.auth.backend.enums.OAuth2ProviderEnum;
 import com.rbhagat32.auth.backend.enums.RoleEnum;
 import com.rbhagat32.auth.backend.kafka.WelcomeEmailProducer;
 import com.rbhagat32.auth.backend.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,7 +61,6 @@ public class AuthService {
         String token = jwtUtil.generateToken(savedUser);
 
         producer.produceWelcomeEmail(savedUser);
-
         return new AuthResponseDTO(token, modelMapper.map(savedUser, UserDTO.class));
     }
 
@@ -73,6 +74,52 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(user);
         return new AuthResponseDTO(token, modelMapper.map(user, UserDTO.class));
+    }
+
+    public AuthResponseDTO OAuth2Login(OAuth2User user, String registrationId) {
+        String providerId = jwtUtil.getProviderIdFromOAuth2User(user, registrationId);
+        OAuth2ProviderEnum providerType = jwtUtil.getProviderTypeFromRegistrationId(registrationId);
+
+        String email = user.getAttribute("email");
+        String name = user.getAttribute("name");
+        String avatarUrl = jwtUtil.getAvatarUrl(user, registrationId);
+
+        // if user exists with same provider -> generate token
+        UserEntity existingOAuth2User = userRepository.findByProviderIdAndProviderType(providerId, providerType).orElse(null);
+        if (existingOAuth2User != null) {
+            String token = jwtUtil.generateToken(existingOAuth2User);
+            return new AuthResponseDTO(token, modelMapper.map(existingOAuth2User, UserDTO.class));
+        }
+
+        // if user exists with different provider / email + password -> update with new provider
+        UserEntity existingUser = userRepository.findByEmail(email).orElse(null);
+        if (existingUser != null) {
+            existingUser.setProviderId(providerId);
+            existingUser.setProviderType(providerType);
+            if (avatarUrl != null) existingUser.setAvatarUrl(avatarUrl);
+
+            UserEntity updatedUser = userRepository.save(existingUser);
+            String token = jwtUtil.generateToken(updatedUser);
+            return new AuthResponseDTO(token, modelMapper.map(updatedUser, UserDTO.class));
+        }
+
+        // if first time -> register new user
+        Set<RoleEnum> roles = new HashSet<>();
+        roles.add(RoleEnum.ROLE_USER);
+
+        UserEntity newUser = new UserEntity();
+        newUser.setName(name);
+        newUser.setEmail(email);
+        newUser.setAvatarUrl(avatarUrl);
+        newUser.setProviderId(providerId);
+        newUser.setProviderType(providerType);
+        newUser.setRoles(roles);
+
+        UserEntity savedUser = userRepository.save(newUser);
+        String token = jwtUtil.generateToken(savedUser);
+
+        producer.produceWelcomeEmail(savedUser);
+        return new AuthResponseDTO(token, modelMapper.map(savedUser, UserDTO.class));
     }
 
     public UserDTO getLoggedInUser1(Authentication authentication) {

@@ -8,6 +8,8 @@ frontend:
     prod: https://sca.void9.space
 
 spring:
+  profiles:
+    active: dev
   devtools:
     restart:
       enabled: true
@@ -48,6 +50,14 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+  security.oauth2.client.registration:
+    google:
+      client-id: 987358419549-7hepeun9c7qr28f0o9peo26be7vhck7b.apps.googleusercontent.com
+      client-secret: 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
+      redirect-uri: "http://localhost:8080/api/login/oauth2/code/google"
+    github:
+      client-id: sfsf
+      client-secret: sdfjbsbk
 
 jwt:
   secret: dshbgfusdvfgesdfhlgbhljesdbgfhjkledbsghjklbedlhjkfbgbhjlearsjgf
