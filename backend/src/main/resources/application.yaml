@@ -5,7 +5,7 @@ server:
 frontend:
   url:
     dev: http://localhost:5173
-    prod: http://localhost:3000
+    prod: https://sca.void9.space
 
 spring:
   devtools:

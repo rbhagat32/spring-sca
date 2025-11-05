@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres
+    image: postgres:16
     container_name: postgres
     environment:
       POSTGRES_USER: raghav
@@ -15,7 +15,7 @@ services:
       retries: 10
 
   redis:
-    image: redis
+    image: redis:7
     container_name: redis
     volumes:
       - redis-dump:/data
@@ -26,18 +26,20 @@ services:
       retries: 10
 
   kafka:
-    image: bitnami/kafka
+    image: public.ecr.aws/bitnami/kafka:3.9.0
     container_name: kafka
     environment:
       KAFKA_ENABLE_KRAFT: yes
       KAFKA_CFG_NODE_ID: 1
       KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
       KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
       ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_HEAP_OPTS: -Xmx512m -Xms256m
     healthcheck:
       test:
         [
@@ -76,7 +78,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_BACKEND_URL: http://localhost:8080
+        VITE_BACKEND_URL: https://sca.void9.space
     container_name: frontend
     ports:
       - "5173:5173"
