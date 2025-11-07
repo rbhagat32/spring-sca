@@ -14,6 +14,7 @@ const NavBar = () => {
               src={loading ? "/favicon.svg" : user?.avatarUrl || "/favicon.svg"}
               alt="User's Profile Picture"
               className="size-full object-cover"
+              referrerPolicy="no-referrer"
             />
           </div>
           <h1 className="text-xl font-semibold tracking-tighter">

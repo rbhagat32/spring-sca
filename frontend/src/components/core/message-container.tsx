@@ -54,6 +54,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
                 src={msg?.sender?.avatarUrl || "/favicon.svg"}
                 alt="Sender Profile Picture"
                 className="size-full object-cover"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
