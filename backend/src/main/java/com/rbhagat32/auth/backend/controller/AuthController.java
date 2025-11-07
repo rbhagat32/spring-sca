@@ -29,7 +29,7 @@ public class AuthController {
             @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
 
         AuthResponseDTO registerResponse = authService.register(body, avatar);
-        ResponseCookie cookie = cookieUtil.setCookie(registerResponse);
+        ResponseCookie cookie = cookieUtil.setCookie(registerResponse, "TOKEN");
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -40,7 +40,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO body) {
         AuthResponseDTO loginResponse = authService.login(body);
-        ResponseCookie cookie = cookieUtil.setCookie(loginResponse);
+        ResponseCookie cookie = cookieUtil.setCookie(loginResponse, "TOKEN");
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -49,7 +49,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
-        ResponseCookie cookie = cookieUtil.removeCookie();
+        ResponseCookie cookie = cookieUtil.removeCookie("TOKEN");
 
         return ResponseEntity
                 .status(HttpStatus.OK)

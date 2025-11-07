@@ -59,6 +59,8 @@ spring:
       client-id: Iv23li5eofXL06XSatYF
       client-secret: e043ce44d76ffc281da474f1961b08d2b37cde47
       redirect-uri: "http://localhost:8080/api/login/oauth2/code/github"
+  session:
+    store-type: redis
 
 jwt:
   secret: dshbgfusdvfgesdfhlgbhljesdbgfhjkledbsghjklbedlhjkfbgbhjlearsjgf

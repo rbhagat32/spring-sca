@@ -11,9 +11,9 @@ public class CookieUtil {
     @Value("${cookie.expiration}")
     private long COOKIE_EXPIRATION;
 
-    public ResponseCookie setCookie(AuthResponseDTO authResponseDTO) {
+    public ResponseCookie setCookie(AuthResponseDTO authResponseDTO, String cookieName) {
         return ResponseCookie
-                .from("token", authResponseDTO.getToken())
+                .from(cookieName, authResponseDTO.getToken())
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
@@ -22,9 +22,9 @@ public class CookieUtil {
                 .build();
     }
 
-    public ResponseCookie removeCookie() {
+    public ResponseCookie removeCookie(String cookieName) {
         return ResponseCookie
-                .from("token", "")
+                .from(cookieName, "")
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")

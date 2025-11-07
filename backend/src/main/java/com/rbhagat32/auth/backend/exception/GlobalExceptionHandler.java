@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
                 "Invalid JWT token: " + ex.getMessage(),
                 request.getRequestURI());
 
-        ResponseCookie cookie = cookieUtil.removeCookie();
+        ResponseCookie cookie = cookieUtil.removeCookie("TOKEN");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body((apiError));
