@@ -1,6 +1,5 @@
 package com.rbhagat32.auth.backend.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbhagat32.auth.backend.dto.AuthResponseDTO;
 import com.rbhagat32.auth.backend.service.AuthService;
 import com.rbhagat32.auth.backend.util.CookieUtil;
@@ -13,6 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -33,8 +34,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private String FRONTEND_URL_PROD;
 
     private final ApplicationContext context;
-    private final ObjectMapper objectMapper;
     private final CookieUtil cookieUtil;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -43,8 +44,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String registrationId = token.getAuthorizedClientRegistrationId();
 
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+                token.getAuthorizedClientRegistrationId(),
+                token.getName()
+        );
+        String accessToken = client != null && client.getAccessToken() != null
+                ? client.getAccessToken().getTokenValue()
+                : null;
+
         AuthService authService = context.getBean(AuthService.class);
-        AuthResponseDTO authResponse = authService.OAuth2Login(user, registrationId);
+        AuthResponseDTO authResponse = authService.OAuth2Login(user, registrationId, accessToken);
 
         ResponseCookie cookie = cookieUtil.setCookie(authResponse);
 

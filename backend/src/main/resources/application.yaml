@@ -56,8 +56,8 @@ spring:
       client-secret: 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
       redirect-uri: "http://localhost:8080/api/login/oauth2/code/google"
     github:
-      client-id: Iv23li8tuFJ9IBI4CntH
-      client-secret: 0a15ce032342de8eb60e7d8903886e550d089786
+      client-id: Iv23li5eofXL06XSatYF
+      client-secret: e043ce44d76ffc281da474f1961b08d2b37cde47
       redirect-uri: "http://localhost:8080/api/login/oauth2/code/github"
 
 jwt:

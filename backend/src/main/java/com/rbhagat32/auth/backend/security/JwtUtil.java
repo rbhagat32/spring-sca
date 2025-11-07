@@ -8,11 +8,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @Slf4j
@@ -93,6 +100,59 @@ public class JwtUtil {
         }
 
         return providerId;
+    }
+
+    public String extractEmail(OAuth2User user, String registrationId, String accessToken) {
+        switch (registrationId.toLowerCase()) {
+            case "google":
+                return user.getAttribute("email");
+
+            case "github":
+                String email = user.getAttribute("email");
+                if (email == null || email.isEmpty()) {
+                    if (accessToken != null) {
+                        try {
+                            RestTemplate restTemplate = new RestTemplate();
+                            HttpHeaders headers = new HttpHeaders();
+                            headers.add("Authorization", "token " + accessToken);
+                            headers.add("Accept", "application/vnd.github.v3+json");
+
+                            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                            ResponseEntity<List> response = restTemplate.exchange(
+                                    "https://api.github.com/user/emails",
+                                    HttpMethod.GET,
+                                    entity,
+                                    List.class
+                            );
+
+                            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                                List<Map<String, Object>> emails = response.getBody();
+
+                                for (Map<String, Object> e : emails) {
+                                    if (Boolean.TRUE.equals(e.get("primary")) && Boolean.TRUE.equals(e.get("verified"))) {
+                                        return (String) e.get("email");
+                                    }
+                                }
+
+                                if (!emails.isEmpty()) {
+                                    return (String) emails.get(0).get("email");
+                                }
+                            }
+                        } catch (Exception ex) {
+                            log.error(ex.getMessage(), ex);
+                        }
+                    }
+
+                    // fallback if API fails
+                    String username = user.getAttribute("login");
+                    return username + "@gmail.com";
+                }
+                return email;
+
+            default:
+                return user.getAttribute("email");
+        }
     }
 
     public String getAvatarUrl(OAuth2User user, String registrationId) {

@@ -76,11 +76,11 @@ public class AuthService {
         return new AuthResponseDTO(token, modelMapper.map(user, UserDTO.class));
     }
 
-    public AuthResponseDTO OAuth2Login(OAuth2User user, String registrationId) {
+    public AuthResponseDTO OAuth2Login(OAuth2User user, String registrationId, String accessToken) {
         String providerId = jwtUtil.getProviderIdFromOAuth2User(user, registrationId);
         OAuth2ProviderEnum providerType = jwtUtil.getProviderTypeFromRegistrationId(registrationId);
 
-        String email = user.getAttribute("email");
+        String email = jwtUtil.extractEmail(user, registrationId, accessToken);
         String name = user.getAttribute("name");
         String avatarUrl = jwtUtil.getAvatarUrl(user, registrationId);
 
@@ -96,7 +96,7 @@ public class AuthService {
         if (existingUser != null) {
             existingUser.setProviderId(providerId);
             existingUser.setProviderType(providerType);
-            if (avatarUrl != null) existingUser.setAvatarUrl(avatarUrl);
+            // if (avatarUrl != null) existingUser.setAvatarUrl(avatarUrl); // update avatar to new provider's avatar
 
             UserEntity updatedUser = userRepository.save(existingUser);
             String token = jwtUtil.generateToken(updatedUser);
