@@ -10,10 +10,6 @@ frontend:
 spring:
   profiles:
     active: dev
-  devtools:
-    restart:
-      enabled: true
-      trigger-file: .restart-trigger
   datasource:
     url: jdbc:postgresql://postgres:5432/spring-sca
     username: raghav

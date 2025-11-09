@@ -1,4 +1,4 @@
-FROM maven:3.9.3-eclipse-temurin-17 AS builder
+FROM maven:3.9-eclipse-temurin-21 AS builder
 WORKDIR /app
 
 COPY pom.xml .
@@ -7,10 +7,10 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 
-FROM eclipse-temurin:17-jdk-alpine AS runner
+FROM eclipse-temurin:21-jdk-alpine AS runner
 WORKDIR /app
 
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
 
-ENTRYPOINT ["java","-Duser.timezone=Asia/Kolkata","-jar","app.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Kolkata", "-jar", "app.jar"]
