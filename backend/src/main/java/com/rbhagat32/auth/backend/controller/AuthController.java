@@ -48,13 +48,19 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
+    public ResponseEntity<String> logout(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("You are already Logged Out !");
+        }
+
         ResponseCookie cookie = cookieUtil.removeCookie("TOKEN");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("Logged out successfully");
+                .body("Logged Out Successfully !");
     }
 
     @GetMapping("/get-user-1")
