@@ -7,4 +7,4 @@ prod:
 clean:
 	docker compose -f compose-prod.yaml down --rmi local --remove-orphans
 	docker image prune -f
-	docker volume rm spring-sca_redis-dump
+	docker volume prune -f
