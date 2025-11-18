@@ -31,7 +31,7 @@ public class WebSocketEventListener {
             onlineUsersMap.addToOnlineUsersMap(userId, socketId);
             pub.refreshOnlineUsers();
 
-            log.info("✅ User connected: {} -> {}", userId, socketId);
+            log.info("User Connected: {} -> {}", userId, socketId);
         }
     }
 
@@ -43,6 +43,6 @@ public class WebSocketEventListener {
         onlineUsersMap.removeFromOnlineUsersMap(sessionId);
         pub.refreshOnlineUsers();
 
-        log.info("❌ User disconnected: {}", sessionId);
+        log.info("User Disconnected: {}", sessionId);
     }
 }
