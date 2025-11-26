@@ -92,8 +92,6 @@ services:
       - "5173:5173"
     env_file:
       - ./frontend/.env
-    depends_on:
-      - nginx
     develop:
       watch:
         - action: sync
