@@ -82,3 +82,9 @@ To stop and clean up resources:
 ## 6. Enable HTTPS with Certbot
 
 Install **Certbot** to automatically generate and manage SSL certificates.
+
+---
+
+## 7. Security Group (Inbound Rules)
+
+Allow traffic only on ports `22` and `443` only after setting up HTTPS.
