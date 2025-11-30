@@ -48,7 +48,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
             </div>
 
             <div
-              className={`size-12 overflow-hidden rounded-full ${onlineUsers.some((user) => user?.id === msg?.sender?.id) && "ring-2 ring-green-500"}`}
+              className={`size-12 shrink-0 overflow-hidden rounded-full ${onlineUsers.some((user) => user?.id === msg?.sender?.id) && "ring-2 ring-green-500"}`}
             >
               <img
                 src={msg?.sender?.avatarUrl || "/favicon.svg"}
