@@ -9,6 +9,7 @@ frontend:
 
 logging:
   level:
+    org.hibernate: OFF
     org.apache.kafka: OFF
     org.springframework.kafka: OFF
 
