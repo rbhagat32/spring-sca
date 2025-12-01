@@ -7,6 +7,11 @@ frontend:
     dev: http://localhost:5173
     prod: https://sca.void9.space
 
+logging:
+  level:
+    org.apache.kafka: OFF
+    org.springframework.kafka: OFF
+
 spring:
   profiles:
     active: dev
