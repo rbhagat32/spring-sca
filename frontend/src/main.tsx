@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
-import { App } from "@/app.tsx";
+import { App } from "@/app";
 import { UserProvider } from "@/context/user-provider";
 import "@/index.css";
 
