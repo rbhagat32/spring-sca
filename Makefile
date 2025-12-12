@@ -1,10 +1,10 @@
 dev:
-	docker compose -f compose-dev.yaml up --scale backend=5 --watch
+	docker compose -f compose.dev.yaml up --scale backend=5 --watch
 
 prod:
-	docker compose -f compose-prod.yaml up --scale backend=5 --build -d
+	docker compose -f compose.prod.yaml up --scale backend=5 --build -d
 
 clean:
-	docker compose -f compose-prod.yaml down --rmi local --remove-orphans
+	docker compose -f compose.prod.yaml down --rmi local --remove-orphans
 	docker image prune -f
 	docker volume prune -f
