@@ -9,7 +9,7 @@ export function App() {
 
   return (
     <>
-      {loading ? <PageLoader /> : <Routing isLoggedIn={!!user} />}
+      {loading ? <PageLoader fullScreen /> : <Routing isLoggedIn={!!user} />}
       <Toaster richColors position="top-center" duration={5000} />
     </>
   );
