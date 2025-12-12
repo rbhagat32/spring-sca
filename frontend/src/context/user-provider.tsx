@@ -1,5 +1,6 @@
-import { api } from "@/utils/axios";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+
+import { api } from "@/utils/axios";
 
 type UserContextType = {
   user: IUser;

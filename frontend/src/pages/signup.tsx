@@ -1,12 +1,13 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
+
+import { ImageUpload } from "@/components/custom/image-upload";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-provider";
-import { Link } from "react-router-dom";
-import { toast } from "sonner";
-import { useState } from "react";
-import { ImageUpload } from "@/components/custom/image-upload";
 
 export function SignUpPage() {
   const { submitting, signup } = useUser();

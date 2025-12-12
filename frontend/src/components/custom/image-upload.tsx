@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import { Dropzone, DropzoneEmptyState } from "@/components/ui/dropzone";
 import {
   ImageCrop,

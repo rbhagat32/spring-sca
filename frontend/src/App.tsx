@@ -1,7 +1,8 @@
+import { Toaster } from "sonner";
+
 import { PageLoader } from "@/components/custom/page-loader";
 import { useUser } from "@/context/user-provider";
 import { Routing } from "@/utils/routing";
-import { Toaster } from "sonner";
 
 export function App() {
   const { loading, user } = useUser();

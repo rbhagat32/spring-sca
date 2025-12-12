@@ -1,3 +1,4 @@
+import { Client, type IMessage as StompMessageType } from "@stomp/stompjs";
 import {
   createContext,
   useCallback,
@@ -7,11 +8,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { api } from "@/utils/axios";
 import SockJS from "sockjs-client";
-import { Client, type IMessage as StompMessageType } from "@stomp/stompjs";
-import { useUser } from "./user-provider";
 import { toast } from "sonner";
+
+import { useUser } from "@/context/user-provider";
+import { api } from "@/utils/axios";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
 

@@ -1,7 +1,8 @@
-import { PageLoader } from "@/components/custom/page-loader";
-import { isAdmin } from "@/helpers/check-admin";
 import moment from "moment";
 import { useEffect, useRef } from "react";
+
+import { PageLoader } from "@/components/custom/page-loader";
+import { isAdmin } from "@/helpers/check-admin";
 
 interface MessageContainerProps {
   messages: IMessage[];

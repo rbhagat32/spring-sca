@@ -1,4 +1,4 @@
-export const NotFound = () => {
+export function PageNotFound() {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <div className="flex items-center gap-4">
@@ -8,4 +8,4 @@ export const NotFound = () => {
       </div>
     </div>
   );
-};
+}

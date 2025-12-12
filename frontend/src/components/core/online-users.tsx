@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
 import { Info, X } from "lucide-react";
-import { Button } from "../ui/button";
+import { useEffect, useRef, useState } from "react";
+
+import { Button } from "@/components/ui/button";
 
 interface OnlineUsersProps {
   onlineUsers: IUser[];

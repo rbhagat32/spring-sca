@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "@/utils/protected-route";
-import { NotFound } from "@/components/custom/page-not-found";
-import { HomePage } from "@/pages/home";
+
+import { PageNotFound } from "@/components/custom/page-not-found";
+import { SocketProvider } from "@/context/socket-provider";
 import { AuthLayout } from "@/layouts/auth";
+import { RootLayout } from "@/layouts/root";
+import { HomePage } from "@/pages/home";
 import { LoginPage } from "@/pages/login";
 import { SignUpPage } from "@/pages/signup";
-import { RootLayout } from "@/layouts/root";
-import { SocketProvider } from "@/context/socket-provider";
+import { ProtectedRoute } from "@/utils/protected-route";
 
 const Routing = ({ isLoggedIn = false }: { isLoggedIn: boolean }) => {
   return (
@@ -47,7 +48,7 @@ const Routing = ({ isLoggedIn = false }: { isLoggedIn: boolean }) => {
         />
       </Route>
 
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
