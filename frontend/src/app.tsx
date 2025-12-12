@@ -1,11 +1,11 @@
 import { Toaster } from "sonner";
 
 import { PageLoader } from "@/components/custom/page-loader";
-import { useUser } from "@/context/user-provider";
+import { useAuth } from "@/context/auth-provider";
 import { Routing } from "@/utils/routing";
 
 export function App() {
-  const { loading, user } = useUser();
+  const { loading, user } = useAuth();
 
   return (
     <>

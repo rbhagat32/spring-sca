@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/context/user-provider";
+import { useAuth } from "@/context/auth-provider";
 
 export function SignUpPage() {
-  const { submitting, signup } = useUser();
+  const { submitting, signup } = useAuth();
   const [file, setFile] = useState<File | null>(null);
 
   const handleSubmit = async (

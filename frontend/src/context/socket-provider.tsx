@@ -11,7 +11,7 @@ import {
 import SockJS from "sockjs-client";
 import { toast } from "sonner";
 
-import { useUser } from "@/context/user-provider";
+import { useAuth } from "@/context/auth-provider";
 import { api } from "@/utils/axios";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
@@ -33,7 +33,7 @@ const SocketProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const stompClientRef = useRef<Client | null>(null);
 
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const connect = useCallback(() => {
     const socket = new SockJS(`${SERVER_URL}/api/ws`);

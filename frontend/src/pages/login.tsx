@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/context/user-provider";
+import { useAuth } from "@/context/auth-provider";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
 
 export function LoginPage() {
-  const { submitting, login } = useUser();
+  const { submitting, login } = useAuth();
 
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLFormElement | HTMLInputElement>

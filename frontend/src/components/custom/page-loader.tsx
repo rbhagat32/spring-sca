@@ -1,6 +1,6 @@
 import styles from "@/components/custom/page-loader.module.css";
 
-const PageLoader = ({ fullScreen = false }: { fullScreen?: boolean }) => {
+export function PageLoader({ fullScreen = false }: { fullScreen?: boolean }) {
   return (
     <div
       className={`z-50 ${
@@ -10,6 +10,4 @@ const PageLoader = ({ fullScreen = false }: { fullScreen?: boolean }) => {
       <div className={styles.loader} />
     </div>
   );
-};
-
-export { PageLoader };
+}

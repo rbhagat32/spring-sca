@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 import { api } from "@/utils/axios";
 
-type UserContextType = {
+type IAuthContext = {
   user: IUser;
   loading: boolean;
   submitting: boolean;
@@ -11,9 +11,9 @@ type UserContextType = {
   logout: () => void;
 };
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
-function UserProvider({ children }: { children: ReactNode }) {
+function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<IUser>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -80,16 +80,16 @@ function UserProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, submitting, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, submitting, login, signup, logout }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
-function useUser() {
-  const state = useContext(UserContext);
-  if (!state) throw new Error("useUser must be used within UserProvider");
+function useAuth() {
+  const state = useContext(AuthContext);
+  if (!state) throw new Error("useAuth must be used within AuthProvider");
   return state;
 }
 
-export { UserProvider, useUser };
+export { AuthProvider, useAuth };

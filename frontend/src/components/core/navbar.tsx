@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/context/user-provider";
+import { useAuth } from "@/context/auth-provider";
 import { isAdmin } from "@/helpers/check-admin";
 
 const NavBar = () => {
-  const { loading, user, logout } = useUser();
+  const { loading, user, logout } = useAuth();
 
   return (
     <nav className="mb-4 flex items-center justify-between border-b border-zinc-500 pb-4">
