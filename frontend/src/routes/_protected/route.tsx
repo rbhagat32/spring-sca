@@ -6,6 +6,8 @@ import { SocketProvider } from "@/context/socket-provider";
 export const Route = createFileRoute("/_protected")({
   beforeLoad: ({ context }) => {
     const { isLoggedIn } = context;
+
+    if (isLoggedIn === undefined) return;
     if (!isLoggedIn) throw redirect({ to: "/login" });
   },
   component: RouteComponent,
