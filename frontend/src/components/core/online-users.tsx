@@ -32,16 +32,18 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
   return (
     <div className="absolute right-2">
       {!isOpen && (
-        <Button size="icon" variant="outline" onClick={() => setIsOpen(true)} className="border">
+        <Button
+          size="icon"
+          variant="secondary"
+          onClick={() => setIsOpen(true)}
+          className="z-50 border"
+        >
           <Info className="size-4" />
         </Button>
       )}
 
       {isOpen && (
-        <div
-          ref={panelRef}
-          className="w-56 rounded-xl border bg-white p-3 shadow-lg dark:bg-neutral-900"
-        >
+        <div ref={panelRef} className="bg-card w-56 rounded-xl border p-3 shadow-lg">
           <div className="mb-4 flex items-center justify-between">
             <h4 className="font-semibold">Online Users</h4>
             <Button size="icon" variant="ghost" onClick={() => setIsOpen(false)} className="size-6">
@@ -51,7 +53,7 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
 
           <ul className="max-h-60 overflow-y-auto text-sm">
             {onlineUsers.map((user) => (
-              <li key={user?.id} className="mb-2 rounded-md bg-zinc-800 p-2">
+              <li key={user?.id} className="bg-muted mb-2 rounded-md p-2">
                 {user?.name}
               </li>
             ))}

@@ -23,7 +23,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
   return (
     <div
       ref={messagesContainerRef}
-      style={{ height: "calc(100vh - 150px)", overflowY: "auto" }}
+      style={{ height: "calc(100vh - 145px)", overflowY: "auto" }}
       className="flex-1 space-y-3 p-4"
     >
       {loading ? (
@@ -32,7 +32,7 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
         messages.map((msg, index) => (
           <div
             key={index}
-            className="mx-auto flex w-100 items-center justify-between gap-4 rounded-2xl border bg-zinc-800 px-5 py-3 text-zinc-100 shadow-lg"
+            className="bg-muted mx-auto flex w-100 items-center justify-between gap-4 rounded-2xl border px-5 py-3 shadow-lg"
           >
             <div className="flex min-w-0 flex-col">
               <p className="mb-2 font-semibold wrap-break-word">{msg?.content}</p>
