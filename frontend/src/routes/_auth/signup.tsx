@@ -1,5 +1,5 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 import { ImageUpload } from "@/components/custom/image-upload";
@@ -9,7 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/auth-provider";
 
-export function SignUpPage() {
+export const Route = createFileRoute("/_auth/signup")({
+  component: SignupPage,
+});
+
+function SignupPage() {
   const { submitting, signup } = useAuth();
   const [file, setFile] = useState<File | null>(null);
 
@@ -56,7 +60,7 @@ export function SignUpPage() {
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome</h1>
                 <p className="text-muted-foreground text-balance">
-                  Create a new <span className="underline">Scalable Chat App</span> account
+                  Create a new <span className="underline">Spring-SCA</span> account
                 </p>
               </div>
 

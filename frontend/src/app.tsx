@@ -1,16 +1,9 @@
-import { Toaster } from "sonner";
-
-import { PageLoader } from "@/components/custom/page-loader";
 import { useAuth } from "@/context/auth-provider";
-import { Routing } from "@/utils/routing";
+import { router } from "@/main";
+import { RouterProvider } from "@tanstack/react-router";
 
 export function App() {
-  const { loading, user } = useAuth();
+  const isLoggedIn = !!useAuth().user;
 
-  return (
-    <>
-      {loading ? <PageLoader fullScreen /> : <Routing isLoggedIn={!!user} />}
-      <Toaster richColors position="top-center" duration={5000} />
-    </>
-  );
+  return <RouterProvider router={router} context={{ isLoggedIn }} />;
 }

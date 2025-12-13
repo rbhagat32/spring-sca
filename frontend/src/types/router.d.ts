@@ -1,0 +1,3 @@
+interface IRouterContext {
+  isLoggedIn: boolean;
+}

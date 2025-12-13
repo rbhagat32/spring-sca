@@ -9,7 +9,7 @@ import {
   ImageCropContent,
   ImageCropReset,
 } from "@/components/ui/image-crop";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/cn";
 
 interface ImageUploadProps {
   onFileChange?: (file: File | null) => void;

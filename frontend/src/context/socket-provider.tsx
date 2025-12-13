@@ -12,7 +12,7 @@ import SockJS from "sockjs-client";
 import { toast } from "sonner";
 
 import { useAuth } from "@/context/auth-provider";
-import { api } from "@/utils/axios";
+import { api } from "@/lib/axios";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
 

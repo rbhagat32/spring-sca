@@ -24,7 +24,7 @@ import ReactCrop, {
 import "react-image-crop/dist/ReactCrop.css";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/cn";
 
 const centerAspectCrop = (
   mediaWidth: number,

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,11 @@ import { useAuth } from "@/context/auth-provider";
 
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL;
 
-export function LoginPage() {
+export const Route = createFileRoute("/_auth/login")({
+  component: LoginPage,
+});
+
+function LoginPage() {
   const { submitting, login } = useAuth();
 
   const handleSubmit = async (
@@ -54,7 +58,7 @@ export function LoginPage() {
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome</h1>
                 <p className="text-muted-foreground text-balance">
-                  Login to your <span className="underline">Scalable Chat App</span> account.
+                  Login to your <span className="underline">Spring-SCA</span> account.
                 </p>
               </div>
               <div className="grid gap-3">

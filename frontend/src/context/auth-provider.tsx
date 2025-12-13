@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-import { api } from "@/utils/axios";
+import { api } from "@/lib/axios";
+import { router } from "@/main";
 
 type IAuthContext = {
   user: IUser;
@@ -21,6 +22,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     getLoggedInUser();
   }, []);
+
+  // update the router context when user state changes
+  useEffect(() => {
+    router.invalidate();
+  }, [user]);
 
   const login = async (email: string, password: string) => {
     setSubmitting(true);

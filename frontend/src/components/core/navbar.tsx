@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-provider";
-import { isAdmin } from "@/helpers/check-admin";
+import { isAdmin } from "@/lib/check-admin";
 
 const NavBar = () => {
   const { loading, user, logout } = useAuth();
