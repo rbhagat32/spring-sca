@@ -21,7 +21,7 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <div className="bg-card rounded-xl p-2">
+        <div className="p-1">
           <h4 className="mb-2 text-center font-semibold">Online Users</h4>
 
           <ul className="max-h-60 overflow-y-auto text-sm">
