@@ -93,7 +93,8 @@ export function ImageUpload({ onFileChange }: ImageUploadProps) {
 
       {/* crop window */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="relative flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 bg-zinc-900 p-4 shadow-lg">
+        <div className="bg-card relative flex w-full max-w-lg flex-col items-center justify-center rounded-xl border p-4 shadow-lg">
+          <h1 className="mb-4 text-xl font-semibold">Crop Image</h1>
           <ImageCrop
             aspect={1}
             circularCrop
