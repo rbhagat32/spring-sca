@@ -126,7 +126,7 @@ function LoginPage() {
 
           <div className="bg-muted relative hidden md:block">
             <img
-              src="ducati.jpg"
+              src="auth.jpeg"
               alt="Login Image"
               loading="eager"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5]"

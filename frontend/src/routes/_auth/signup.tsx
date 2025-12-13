@@ -44,7 +44,7 @@ function SignupPage() {
         <CardContent className="grid p-0 md:grid-cols-2">
           <div className="bg-muted relative hidden md:block">
             <img
-              src="ducati.jpg"
+              src="auth.jpeg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5]"
             />
