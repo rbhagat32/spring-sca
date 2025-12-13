@@ -32,9 +32,9 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
         messages.map((msg, index) => (
           <div
             key={index}
-            className="mx-auto flex w-[350px] items-center justify-between rounded-2xl bg-zinc-800 px-5 py-3 text-zinc-100 shadow-lg"
+            className="mx-auto flex w-100 items-center justify-between gap-4 rounded-2xl border bg-zinc-800 px-5 py-3 text-zinc-100 shadow-lg"
           >
-            <div>
+            <div className="flex min-w-0 flex-col">
               <p className="mb-2 font-semibold wrap-break-word">{msg?.content}</p>
               <p className="text-sm text-zinc-500">
                 {moment(msg?.createdAt).format("DD MMM YYYY [at] hh:mm A")}
