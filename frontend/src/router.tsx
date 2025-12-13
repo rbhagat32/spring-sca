@@ -17,7 +17,7 @@ declare module "@tanstack/react-router" {
   }
 }
 
-export function App() {
+export function Router() {
   const { loading, user } = useAuth();
 
   return loading ? (
