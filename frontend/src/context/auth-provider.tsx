@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
+import { router } from "@/app";
 import { api } from "@/lib/axios";
-import { router } from "@/main";
 
 type IAuthContext = {
   user: IUser;
