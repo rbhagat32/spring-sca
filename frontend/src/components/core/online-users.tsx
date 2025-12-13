@@ -30,9 +30,9 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
   }, [isOpen]);
 
   return (
-    <div className="absolute top-1 right-2">
+    <div className="absolute right-2">
       {!isOpen && (
-        <Button size="icon" variant="secondary" onClick={() => setIsOpen(true)} className="size-8">
+        <Button size="icon" variant="outline" onClick={() => setIsOpen(true)} className="border">
           <Info className="size-4" />
         </Button>
       )}

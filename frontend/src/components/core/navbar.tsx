@@ -1,3 +1,4 @@
+import { ThemeSwitcher } from "@/components/custom/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-provider";
 import { isAdmin } from "@/lib/check-admin";
@@ -24,13 +25,16 @@ const NavBar = () => {
         </div>
       </div>
 
-      <Button
-        onClick={logout}
-        disabled={loading}
-        className="bg-red-500 text-white hover:bg-red-600"
-      >
-        Logout
-      </Button>
+      <div className="flex items-center gap-2">
+        <ThemeSwitcher />
+        <Button
+          onClick={logout}
+          disabled={loading}
+          className="bg-red-500 text-white hover:bg-red-600"
+        >
+          Logout
+        </Button>
+      </div>
     </nav>
   );
 };
