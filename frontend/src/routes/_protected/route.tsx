@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { NavBar } from "@/components/core/navbar";
+import { SocketProvider } from "@/context/socket-provider";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: ({ context }) => {
@@ -12,12 +13,14 @@ export const Route = createFileRoute("/_protected")({
 
 function RouteComponent() {
   return (
-    <main className="relative mx-auto min-h-screen max-w-screen-sm overflow-y-hidden rounded-sm border bg-zinc-900 p-4">
-      <NavBar />
+    <SocketProvider>
+      <main className="relative mx-auto min-h-screen max-w-screen-sm overflow-y-hidden rounded-sm border bg-zinc-900 p-4">
+        <NavBar />
 
-      <section>
-        <Outlet />
-      </section>
-    </main>
+        <section>
+          <Outlet />
+        </section>
+      </main>
+    </SocketProvider>
   );
 }
