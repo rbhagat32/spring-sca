@@ -1,55 +1,28 @@
-import { Info, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface OnlineUsersProps {
   onlineUsers: IUser[];
 }
 
 export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
   return (
-    <div className="absolute right-2">
-      {!isOpen && (
-        <Button
-          size="icon"
-          variant="secondary"
-          onClick={() => setIsOpen(true)}
-          className="z-50 border"
-        >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" variant="outline" className="border">
           <Info className="size-4" />
         </Button>
-      )}
+      </DropdownMenuTrigger>
 
-      {isOpen && (
-        <div ref={panelRef} className="bg-card w-56 rounded-xl border p-3 shadow-lg">
-          <div className="mb-4 flex items-center justify-between">
-            <h4 className="font-semibold">Online Users</h4>
-            <Button size="icon" variant="ghost" onClick={() => setIsOpen(false)} className="size-6">
-              <X className="size-4" />
-            </Button>
-          </div>
+      <DropdownMenuContent>
+        <div className="bg-card rounded-xl p-2">
+          <h4 className="mb-2 text-center font-semibold">Online Users</h4>
 
           <ul className="max-h-60 overflow-y-auto text-sm">
             {onlineUsers.map((user) => (
@@ -59,7 +32,7 @@ export function OnlineUsers({ onlineUsers }: OnlineUsersProps) {
             ))}
           </ul>
         </div>
-      )}
-    </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

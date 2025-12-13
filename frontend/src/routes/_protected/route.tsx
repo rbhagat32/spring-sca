@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_protected")({
 function RouteComponent() {
   return (
     <SocketProvider>
-      <main className="bg-card relative mx-auto min-h-screen max-w-screen-sm overflow-y-hidden rounded-sm border p-4">
+      <main className="bg-card relative mx-auto min-h-screen max-w-screen-sm overflow-y-hidden rounded-sm border p-4 shadow-sm">
         <NavBar />
         <Outlet />
       </main>

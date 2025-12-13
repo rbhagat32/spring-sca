@@ -1,10 +1,13 @@
+import { OnlineUsers } from "@/components/core/online-users";
 import { ThemeSwitcher } from "@/components/custom/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-provider";
+import { useSocket } from "@/context/socket-provider";
 import { isAdmin } from "@/lib/check-admin";
 
 const NavBar = () => {
   const { loading, user, logout } = useAuth();
+  const { onlineUsers } = useSocket();
 
   return (
     <nav className="mb-4 flex items-center justify-between border-b border-zinc-500 pb-4">
@@ -26,6 +29,7 @@ const NavBar = () => {
       </div>
 
       <div className="flex items-center gap-2">
+        <OnlineUsers onlineUsers={onlineUsers} />
         <ThemeSwitcher />
         <Button
           onClick={logout}

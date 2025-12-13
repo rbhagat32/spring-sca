@@ -32,16 +32,16 @@ export function MessageContainer({ messages, onlineUsers, loading }: MessageCont
         messages.map((msg, index) => (
           <div
             key={index}
-            className="bg-muted mx-auto flex w-100 items-center justify-between gap-4 rounded-2xl border px-5 py-3 shadow-lg"
+            className="bg-muted mx-auto flex w-100 items-center justify-between gap-4 rounded-2xl border px-5 py-3 shadow-sm"
           >
             <div className="flex min-w-0 flex-col">
               <p className="mb-2 font-semibold wrap-break-word">{msg?.content}</p>
-              <p className="text-sm text-zinc-500">
+              <p className="text-muted-foreground text-sm">
                 {moment(msg?.createdAt).format("DD MMM YYYY [at] hh:mm A")}
               </p>
-              <p className="text-sm text-zinc-500">
+              <p className="text-muted-foreground text-sm">
                 {"by "}
-                <span className="text-zinc-300">{msg?.sender?.name}</span>
+                <span className="text-card-foreground">{msg?.sender?.name}</span>
                 {isAdmin(msg?.sender!) && (
                   <span className="font-semibold text-blue-500"> (Admin)</span>
                 )}

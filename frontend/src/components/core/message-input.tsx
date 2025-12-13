@@ -31,7 +31,7 @@ export function MessageInput({ sendMessage }: { sendMessage: (msg: string) => vo
       <Button
         onClick={handleSendMessage}
         size="icon"
-        variant="secondary"
+        variant="outline"
         className="rounded-md border transition-all duration-200"
       >
         <ArrowRight />
