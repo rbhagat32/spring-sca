@@ -28,8 +28,8 @@ public class RealtimeMessageController {
     private final MessageRepository messageRepository;
     private final ModelMapper modelMapper;
 
-    @MessageMapping("/message")                                     // Client emits to:        /emit/message
-    @SendTo("/topic/message")                                       // Server broadcasts to:   /topic/message
+    @MessageMapping("/message") // Client emits to:        /emit/message
+    @SendTo("/topic/message")   // Server broadcasts to:   /topic/message
     public MessageDTO sendMessage(@Valid MessageRecvDTO message) {
         log.info("Server: Realtime message received: {}", message);
 

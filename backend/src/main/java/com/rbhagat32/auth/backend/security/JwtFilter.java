@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;

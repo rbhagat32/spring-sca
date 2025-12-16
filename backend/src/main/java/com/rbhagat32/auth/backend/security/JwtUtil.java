@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-@Slf4j
 @Component
+@Slf4j
 public class JwtUtil {
 
     @Value("${jwt.secret}")
@@ -50,7 +50,7 @@ public class JwtUtil {
     public String generateToken(UserEntity user) {
         return Jwts.builder()
                 .subject(user.getId())
-//                .claim("email", user.getEmail())
+                // .claim("email", user.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
                 .signWith(Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8)))

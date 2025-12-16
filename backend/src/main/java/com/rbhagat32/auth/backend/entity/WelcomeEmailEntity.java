@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WelcomeEmailEntity {
+    
     private String to;
     private String subject;
     private String body;

@@ -9,7 +9,7 @@ public class CustomObjectMapper {
 
     @Bean
     public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper(); // this is com.fasterxml.jackson.databind.ObjectMapper
+        ObjectMapper mapper = new ObjectMapper(); // from -> com.fasterxml.jackson.databind.ObjectMapper
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         return mapper;

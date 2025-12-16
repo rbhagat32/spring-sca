@@ -41,6 +41,7 @@ public class UserEntity implements UserDetails {
     private String avatarUrl;
 
     private String providerId;
+    
     @Enumerated(EnumType.STRING)
     private OAuth2ProviderEnum providerType;
 
