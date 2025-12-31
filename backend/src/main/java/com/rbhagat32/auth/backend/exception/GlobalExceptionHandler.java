@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGenericException(Exception ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntimeException(Exception ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ApiError> handleJwtException(JwtException ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -104,7 +104,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiError> handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -118,7 +118,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         ApiError apiError = new ApiError(
                 Instant.now(),
@@ -132,7 +132,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         FieldError error = ex.getBindingResult().getFieldErrors().stream().findFirst().orElse(null);
         String message = error != null ? error.getDefaultMessage() : "Validation failed";
@@ -152,7 +152,7 @@ public class GlobalExceptionHandler {
     @MessageExceptionHandler(Exception.class)
     @SendTo("/topic/errors")
     public ApiError handleWebSocketGenericException(Exception ex) {
-        log.error(ex.getMessage(), ex);
+        log.error(ex.getMessage());
 
         return new ApiError(
                 Instant.now(),
