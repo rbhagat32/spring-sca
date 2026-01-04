@@ -3,6 +3,7 @@ package com.rbhagat32.auth.backend.security;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Component
+@Slf4j
 public class OAuth2FailureHandler implements AuthenticationFailureHandler {
 
     @Value("${spring.profiles.active}")
@@ -23,7 +25,7 @@ public class OAuth2FailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        System.out.println("OAuth2 Error: " + exception);
+        log.info("OAuth2 Error: {}", String.valueOf(exception));
 
         String frontendUrl = Objects.equals(SPRING_PROFILES_ACTIVE, "prod") ? FRONTEND_URL_PROD : FRONTEND_URL_DEV;
         response.sendRedirect(frontendUrl);

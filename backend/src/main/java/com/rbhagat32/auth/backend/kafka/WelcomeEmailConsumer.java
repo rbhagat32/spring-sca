@@ -4,6 +4,7 @@ import com.rbhagat32.auth.backend.entity.WelcomeEmailEntity;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -11,13 +12,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WelcomeEmailConsumer {
 
     private final JavaMailSender javaMailSender;
 
     @KafkaListener(topics = "WELCOME_EMAILS", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeWelcomeEmail(WelcomeEmailEntity welcomeEmail) {
-        System.out.println("Welcome Email Consumed from Kafka: " + welcomeEmail);
+        log.info("Welcome Email Consumed from Kafka: {}", welcomeEmail);
 
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
@@ -28,7 +30,7 @@ public class WelcomeEmailConsumer {
             helper.setText(welcomeEmail.getBody(), true);
 
             javaMailSender.send(message);
-            System.out.println("Welcome Email sent to: " + welcomeEmail.getTo());
+            log.info("Welcome Email sent to: {}", welcomeEmail.getTo());
 
         } catch (MessagingException e) {
             System.err.println("Failed to send welcome email to: " + welcomeEmail.getTo());

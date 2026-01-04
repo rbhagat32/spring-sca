@@ -17,18 +17,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private String FRONTEND_URL_PROD;
 
     @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins(FRONTEND_URL_DEV, FRONTEND_URL_PROD)
+                .withSockJS();
+    }
+
+    @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // Client sends events with destination starting with /emit
         config.setApplicationDestinationPrefixes("/emit");
 
         // Client subscribes here to receive messages
         config.enableSimpleBroker("/topic");
-    }
-
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
-                .setAllowedOrigins(FRONTEND_URL_DEV, FRONTEND_URL_PROD)
-                .withSockJS();
     }
 }

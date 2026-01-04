@@ -3,11 +3,13 @@ package com.rbhagat32.auth.backend.kafka;
 import com.rbhagat32.auth.backend.entity.UserEntity;
 import com.rbhagat32.auth.backend.entity.WelcomeEmailEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WelcomeEmailProducer {
 
     private final KafkaTemplate<String, WelcomeEmailEntity> kafkaTemplate;
@@ -44,6 +46,6 @@ public class WelcomeEmailProducer {
         );
 
         kafkaTemplate.send("WELCOME_EMAILS", welcomeEmail);
-        System.out.println("Welcome Email Produced to Kafka: " + welcomeEmail);
+        log.info("Welcome Email Produced to Kafka: {}", welcomeEmail);
     }
 }
