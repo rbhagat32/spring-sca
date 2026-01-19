@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: spring-sca
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U raghav -d spring-sca"]
       interval: 5s
@@ -109,4 +109,4 @@ services:
           path: package.json
 
 volumes:
-  pg-data:
+  postgres-data:
